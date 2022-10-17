@@ -1,6 +1,8 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 
+import BasicLayout from "../layouts/BasicLayout";
+
 export default function Home() {
   const [data, setData] = useState(null);
 
@@ -16,9 +18,11 @@ export default function Home() {
   if (!data) return <p>No profile data</p>;
 
   return (
-    <div>
-      <p>Name: {data.message[0].name}</p>
-      <Button type="primary">HELLO WORLD</Button>
-    </div>
+    <BasicLayout>
+      <div>
+        <p>Name: {data.message[0].name}</p>
+        <Button type="primary">HELLO WORLD</Button>
+      </div>
+    </BasicLayout>
   );
 }

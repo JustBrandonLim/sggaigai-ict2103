@@ -1,7 +1,7 @@
 # Set up Project
 
 1. Only use Yarn. Do **_NOT_** use NPM.
-2. Clone repository, run this command `yarn add` to install all missing packages.
+2. Clone repository, run this command `yarn` to install all missing packages.
 3. Run this command `yarn dev` to start the server.
 
 # Set up Database Connection
