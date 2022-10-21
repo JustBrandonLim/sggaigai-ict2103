@@ -13,8 +13,8 @@ module.exports = {
       },
       colors: {
         "sgg-background": "#f0f2f5",
-        "sgg-orange": "#e76f51",
-        "sgg-yellow": "#e9c46a",
+        "sgg-orange": "#CC715A",
+        "sgg-yellow": "#C99F38",
         "sgg-green": "#264653",
         "sgg-blue": "#1890ff",
       },
