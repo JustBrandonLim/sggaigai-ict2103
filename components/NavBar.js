@@ -12,7 +12,7 @@ export default function NavBar(props) {
         props.view == "trip" ? "bg-sgg-black" : props.view == "eat" ? "bg-sgg-orange" : props.view == "do" ? "bg-sgg-yellow" : "bg-sgg-green"
       } transition-colors hover:duration-300`}
     >
-      <div className="container flex items-center justify-between py-3 text-white">
+      <div className="container flex items-center justify-between px-5 py-3 text-white md:p-0">
         <Link href="/app">
           <a>
             <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />

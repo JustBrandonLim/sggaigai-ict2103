@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import Layout from "../../layouts/Layout";
 
-import Card from "../../components/Card";
+import Card from "../../components/AppCard";
 
 export default function Home() {
   const [profileData, setProfileData] = useState(null);
@@ -56,7 +56,7 @@ export default function Home() {
           </div>
         </div>
         <div className="container flex flex-col items-center justify-start min-h-full gap-5 px-5 py-5 md:px-0">
-          {searchData ? searchData.name : [...Array(5)].map((i) => <Card key={i} loading={true} />)}
+          {searchData ? searchData.name : [...Array(5)].map((e, i) => <Card key={i} loading={true} />)}
         </div>
       </section>
     </Layout>
