@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "../layouts/Layout";
 import Card from "../components/TripCard";
+import EmptyTrip from "../components/EmptyTrip";
 import Link from "next/link";
 import PageHeader from "../components/PageHeader";
 
@@ -27,7 +28,7 @@ export default function CreateTrip() {
   return (
     <Layout view={"trip"} loggedIn={true}>
 
-      <section className="w-full inline-block bg-white">
+      <section className="inline-block w-full bg-white">
         <PageHeader
           breadCrumbItems={['Home', 'View Trip']}
           header='Your Trip'
@@ -42,7 +43,7 @@ export default function CreateTrip() {
 
         <div className="flex flex-col items-center justify-start gap-3 px-40 py-10 bg-gray-100">
           <div className="max-w-2xl gap-3">
-            {false ? tripData.trip : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={true} />)}
+            {!tripData ? <EmptyTrip/> : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={true} />)}
           </div>
         </div>
 
