@@ -38,7 +38,8 @@ export default function CreateTrip() {
 
             <div className="flex flex-col items-center justify-start gap-3 px-40 py-10 bg-gray-100">
               <div className="max-w-2xl gap-3">
-                {false ? tripData.trip : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={true} />)}
+                {/* {false ? tripData.trip : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={true} />)} */}
+                <Card tripData={tripData[i]} id={i} key={i} loading={true} />
               </div> 
             </div>             
             
