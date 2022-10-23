@@ -10,13 +10,28 @@ export default function Home() {
   const [view, setView] = useState("eat");
 
   useEffect(() => {
-    /*fetch("/api/test")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        console.log(data.message[0].name);
-      });*/
+    /*
+     fetch(`/api/profile/${email}`)
+          .then((res) => res.json())
+          .then((profileData) => {
+            setProfileData(profileData);
+            console.log(profileData);
+          });
+    */
   }, []);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        fetch(`/api/search/${view}?longitude=${position.coords.longitude}&latitude=${position.coords.latitude}`)
+          .then((res) => res.json())
+          .then((searchData) => {
+            setSearchData(searchData);
+            console.log(searchData);
+          });
+      });
+    }
+  }, [view]);
 
   return (
     <Layout loggedIn={true} view={view}>
