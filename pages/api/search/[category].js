@@ -13,7 +13,7 @@ export default async function SearchHandler(req, res) {
                 loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
               })
               .toArray();
-            res.status(200).json({ restaurants, success: true });
+            res.status(200).json({ results: restaurants, success: true });
             break;
           case "do":
             res.status(501).json({ message: "This is not implemented yet!", success: false });
@@ -25,7 +25,7 @@ export default async function SearchHandler(req, res) {
                 loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
               })
               .toArray();
-            res.status(200).json({ hotels, success: true });
+            res.status(200).json({ results: hotels, success: true });
             break;
         }
       } catch (error) {

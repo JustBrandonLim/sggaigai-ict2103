@@ -5,12 +5,12 @@ const MONGODB_DB = process.env.MONGO_DB_NAME;
 
 // check the MongoDB URI
 if (!MONGODB_URI) {
-  throw new Error("Define the MONGODB_URI environmental variable");
+  throw new Error("Define the MONGODB_URI environment variable!");
 }
 
 // check the MongoDB DB
 if (!MONGODB_DB) {
-  throw new Error("Define the MONGODB_DB environmental variable");
+  throw new Error("Define the MONGODB_DB environment variable!");
 }
 
 let cachedClient = null;
