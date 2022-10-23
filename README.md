@@ -14,6 +14,5 @@ Add these inside.
 MONGO_DB_URI=mongodb+srv://Admin:cDldWFrynYgtuBKJ@sggaigai-ict2103.nmawej7.mongodb.net/?retryWrites=true&w=majority
 MONGO_DB_NAME=SGGAIGAI
 
-MYSQL_DB_URI=NONE
-MYSQL_DB_NAME=NONE
+MYSQL_DB_URI=mysql://7edib6e99krtvzi5172b:pscale_pw_P5HQNZmeeQkWuIVTqzO3tT2UP8FCAdMk5O8pYz7ZsnE@ap-southeast.connect.psdb.cloud/sggaigai?ssl={"rejectUnauthorized":true}
 ```
