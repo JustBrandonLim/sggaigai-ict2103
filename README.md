@@ -12,7 +12,7 @@ Add these inside.
 
 ```
 MONGO_DB_URI=mongodb+srv://Admin:cDldWFrynYgtuBKJ@sggaigai-ict2103.nmawej7.mongodb.net/?retryWrites=true&w=majority
-MONGO_DB_NAME=ICT2103
+MONGO_DB_NAME=SGGAIGAI
 
 MYSQL_DB_URI=NONE
 MYSQL_DB_NAME=NONE

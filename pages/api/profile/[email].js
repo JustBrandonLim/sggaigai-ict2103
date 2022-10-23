@@ -1,4 +1,4 @@
-export default function profileHandler(req, res) {
+export default function ProfileHandler(req, res) {
   switch (req.method) {
     case "GET":
       res.status(200).json({ email: req.query.email, name: "Marcus" });
