@@ -41,15 +41,16 @@ export default function TripCard(props) {
       }    
     if (props.loading)
       return (
-        <div className="grid grid-flow-row grid-cols-3 py-5 hover:cursor-pointer" onClick={() => setActiveNode(props.id)}>
+        // removed grid-cols-3
+        <div className="trip-grid-wrapper grid grid-flow-row py-5 hover:cursor-pointer" onClick={() => setActiveNode(props.id)}>
             <div className="flex-row text-right whitespace-nowrap">
                 <p className="font-bold font-xl">{props.tripData[0].stopName}</p>
                 <p className="font-md">{props.tripData[0].time}</p>
             </div>
-                <div className="block mx-auto">
+                <div>
                     <svg className={`${
                             props.id == activeNode ? "animate-pulse" : ""
-                          } items-center my-2 ml-2`} height="20" width="100">
+                          } timeline-circle`} height="20" width="60">
                         <circle cx="50" cy="10" r="5" stroke=
                         {`${
                             props.view == "edit" ? activeColor : strokeColor
