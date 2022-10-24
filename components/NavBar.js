@@ -12,7 +12,7 @@ export default function NavBar(props) {
         props.view == "trip" ? "bg-sgg-black" : props.view == "eat" ? "bg-sgg-orange" : props.view == "do" ? "bg-sgg-yellow" : "bg-sgg-green"
       } transition-colors hover:duration-300`}
     >
-      <div className="container flex items-center justify-between px-5 py-3 text-white md:p-0">
+      <div className="container flex items-center justify-between px-5 py-3 text-white md:px-0">
         <Link href="/app">
           <a>
             <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />
@@ -30,7 +30,7 @@ export default function NavBar(props) {
             </svg>
             Favourites
           </NavItem>
-          <NavItem href="/trips">
+          <NavItem href="/trip">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path
                 strokeLinecap="round"

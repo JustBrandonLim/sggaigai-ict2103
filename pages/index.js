@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <Layout loggedIn={false}>
-      <section className="container p-5">
+      <section className="container p-5 pt-20">
         <div className="flex flex-col justify-center gap-3 text-center">
           <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />
           <p className="text-sm text-gray-500 md:text-base">Your very own travel companion</p>
