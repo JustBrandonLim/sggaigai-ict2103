@@ -7,7 +7,7 @@ import PageHeader from "../components/PageHeader";
 
 
 export default function CreateTrip() {
-  const [dateTrip, setDateTrip] = useState("");
+  const [dateTrip, setDateTrip] = useState({startDate: "2022-11-01"});
   const [tripData, setTripData] = useState(
     [
       [{date: "2022-11-20", stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
@@ -19,8 +19,29 @@ export default function CreateTrip() {
     ]
   ); // sample results from database
   useEffect(() => {
-    
+    // console.log(incr_date(dateTrip.startDate));
   }, [dateTrip]);
+
+    function incr_date(date_str){
+      var parts = date_str.split("-");
+      var dt = new Date(
+        parseInt(parts[0], 10),      // year
+        parseInt(parts[1], 10) - 1,  // month (starts with 0)
+        parseInt(parts[2], 10)       // date
+      );
+      dt.setDate(dt.getDate() + 1);
+      parts[0] = "" + dt.getFullYear();
+      parts[1] = "" + (dt.getMonth() + 1);
+      if (parts[1].length < 2) {
+        parts[1] = "0" + parts[1];
+      }
+      parts[2] = "" + dt.getDate();
+      if (parts[2].length < 2) {
+        parts[2] = "0" + parts[2];
+      }
+      return parts.join("-");
+    }
+
   return (
     <Layout view={"trip"} loggedIn={true}>
 
@@ -33,7 +54,7 @@ export default function CreateTrip() {
           <div className="flex flex-row">
             <span className="mr-1 text-red-500">*</span>
             <p className="mr-2 text-xs md:text-base">Select a date to view the trips :</p>
-              <input className="border-2 border-gray-300 rounded-md" type="date" onChange={(e) => setDateTrip({startDate: e.target.value})}/>
+              <input className="border-2 border-gray-300 rounded-md" value={dateTrip.startDate} type="date" onChange={(e) => setDateTrip({startDate: e.target.value})}/>
           </div>
         </PageHeader>
 
@@ -44,7 +65,7 @@ export default function CreateTrip() {
         </div>
 
         <div className="flex flex-col items-center justify-end gap-2 px-40 py-10 md:flex-row md:gap-2">
-          <button type="submit" className="px-6 py-2 transition-colors duration-150 bg-white border-2 rounded-smpx-10 text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
+          <button onClick={() => setDateTrip({startDate: incr_date(dateTrip.startDate)})} type="submit" className="px-6 py-2 transition-colors duration-150 bg-white border-2 rounded-smpx-10 text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
             Next Day
           </button>
           <Link href="/editTrip">
