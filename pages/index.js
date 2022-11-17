@@ -46,7 +46,7 @@ export default function Home() {
             <button type="submit" className="px-5 py-2 text-white transition-colors duration-150 bg-sgg-blue hover:bg-sgg-blue/80">
               Sign In
             </button>
-            <label>
+            <label className="flex items-center">
               <input type="checkbox" className="mr-1 accent-sgg-blue hover:accent-sgg-blue" />
               Remember Me
             </label>

@@ -9,23 +9,41 @@ export default async function SearchHandler(req, res) {
           case "eat":
             let restaurants = await db
               .collection("RESTAURANTS")
-              .find({
-                loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
-              })
+              .aggregate(
+                [
+                  {
+                    $geoNear: {
+                      near: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] },
+                      distanceField: "dist.calculated",
+                      spherical: true,
+                    },
+                  },
+                ]
+                //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
+              )
               .toArray();
-            res.status(200).json({ results: restaurants, success: true });
+            res.status(200).json(restaurants);
             break;
           case "do":
-            res.status(501).json({ message: "This is not implemented yet!", success: false });
+            res.status(501).json(null);
             break;
           case "stay":
             let hotels = await db
               .collection("HOTELS")
-              .find({
-                loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
-              })
+              .aggregate(
+                [
+                  {
+                    $geoNear: {
+                      near: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] },
+                      distanceField: "dist.calculated",
+                      spherical: true,
+                    },
+                  },
+                ]
+                //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
+              )
               .toArray();
-            res.status(200).json({ results: hotels, success: true });
+            res.status(200).json(hotels);
             break;
         }
       } catch (error) {

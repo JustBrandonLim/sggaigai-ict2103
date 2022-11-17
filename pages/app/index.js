@@ -6,7 +6,7 @@ import Card from "../../components/AppCard";
 
 export default function Home() {
   const [profileData, setProfileData] = useState(null);
-  const [searchData, setSearchData] = useState(null);
+  const [searchData, setSearchData] = useState([]);
   const [view, setView] = useState("eat");
 
   useEffect(() => {
@@ -21,6 +21,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    setSearchData(null);
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         fetch(`/api/search/${view}?longitude=${position.coords.longitude}&latitude=${position.coords.latitude}`)
@@ -37,7 +39,7 @@ export default function Home() {
     <Layout loggedIn={true} view={view}>
       <section>
         <div className="bg-white">
-          <div className="container flex flex-col items-start justify-center px-5 py-20 md:px-0">
+          <div className="container flex flex-col items-start justify-center px-5 py-20">
             <h2 className="flex items-center text-2xl">
               Welcome back, {profileData ? profileData.name : <div className="w-20 h-2 ml-2 bg-gray-500 rounded animate-pulse"></div>}.
             </h2>
@@ -70,8 +72,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="container flex flex-col items-center justify-start min-h-full gap-5 px-5 py-5 md:px-0">
-          {searchData ? searchData.name : [...Array(5)].map((e, i) => <Card key={i} loading={true} />)}
+        <div className="container flex flex-col items-center justify-start min-h-full gap-5 px-5 py-5">
+          {searchData
+            ? searchData.map((data, i) => <Card key={i} data={data} view={view} />)
+            : [...Array(5)].map((data, i) => <Card key={i} data={data} view={null} />)}
         </div>
       </section>
     </Layout>
