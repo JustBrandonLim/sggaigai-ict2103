@@ -42,11 +42,11 @@ export default function Home() {
   }, [view]);
 
   return (
-    <Layout loggedIn={true} view={view}>
+    <Layout loggedIn={true} view={view} admin={false}>
       <section>
         <div className="bg-white">
           <div className="container flex flex-col items-start justify-center px-5 py-20">
-            <h2 className="flex items-center text-2xl">
+            <h2 className="flex items-center text-2xl font-bold">
               Welcome back, {profileData ? profileData.name : <div className="w-20 h-2 ml-2 bg-gray-500 rounded animate-pulse"></div>}.
             </h2>
             <p className="mt-5 text-sgg-gray text-md">What would you like to do today?</p>

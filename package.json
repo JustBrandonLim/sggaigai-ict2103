@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "iron-session": "^6.3.1",
     "mongodb": "^4.10.0",
     "mysql2": "^2.3.3",
     "next": "13.0.4",

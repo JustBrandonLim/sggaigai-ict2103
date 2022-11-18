@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 export default function Layout(props) {
   return (
     <>
-      <header>{props.loggedIn ? <NavBar view={props.view} /> : null}</header>
+      <header>{props.loggedIn ? <NavBar view={props.view} admin={props.admin} /> : null}</header>
       <main>{props.children}</main>
       <footer>
         <Footer view={props.loggedIn ? props.view : null} />

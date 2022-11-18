@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <Layout loggedIn={false}>
       <section className="container p-5">
-        <div className="flex flex-col justify-center gap-3 text-center">
+        <div className="flex flex-col items-center justify-center gap-3 text-center">
           <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />
           <p className="text-sm text-gray-500 md:text-base">Your very own travel companion</p>
         </div>
@@ -53,8 +53,8 @@ export default function Home() {
           </div>
           <p>
             Not a member?{" "}
-            <Link href="/register">
-              <a className="transition-colors duration-150 text-sgg-blue hover:text-sgg-blue/80">Sign up</a>
+            <Link href="/register" className="transition-colors duration-150 text-sgg-blue hover:text-sgg-blue/80">
+              Sign up
             </Link>{" "}
             now!
           </p>

@@ -21,11 +21,28 @@ export default async function SearchHandler(req, res) {
                 ]
                 //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
               )
+              .limit(100)
               .toArray();
             res.status(200).json(restaurants);
             break;
           case "do":
-            res.status(501).json(null);
+            let events = await db
+              .collection("EVENTS")
+              .aggregate(
+                [
+                  {
+                    $geoNear: {
+                      near: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] },
+                      distanceField: "dist.calculated",
+                      spherical: true,
+                    },
+                  },
+                ]
+                //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
+              )
+              .limit(100)
+              .toArray();
+            res.status(200).json(events);
             break;
           case "stay":
             let hotels = await db
@@ -42,6 +59,7 @@ export default async function SearchHandler(req, res) {
                 ]
                 //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
               )
+              .limit(100)
               .toArray();
             res.status(200).json(hotels);
             break;

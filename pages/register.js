@@ -39,7 +39,7 @@ export default function Register() {
   return (
     <Layout loggedIn={false}>
       <section className="container p-5">
-        <div className="flex flex-col justify-center gap-3 text-center">
+        <div className="flex flex-col items-center justify-center gap-3 text-center">
           <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />
           <p className="text-sm text-gray-500 md:text-base">Your very own travel companion</p>
         </div>
@@ -58,8 +58,8 @@ export default function Register() {
             </button>
             <p>
               Already a member?{" "}
-              <Link href="/">
-                <a className="transition-colors duration-150 text-sgg-blue hover:text-sgg-blue/80">Log in</a>
+              <Link href="/" className="transition-colors duration-150 text-sgg-blue hover:text-sgg-blue/80">
+                Log in
               </Link>{" "}
               now!
             </p>
