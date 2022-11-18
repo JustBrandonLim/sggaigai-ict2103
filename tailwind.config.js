@@ -18,6 +18,7 @@ module.exports = {
         "sgg-green": "#264653",
         "sgg-blue": "#1890ff",
         "sgg-black": "#363636",
+        "sgg-gray": "#8c8c8c",
       },
     },
   },

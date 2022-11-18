@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 export default function Card(props) {
   const data = props.data;
   const view = props.view;
 
   if (data) {
+    const id = data.ID;
     const distance = (data.dist.calculated / 1000).toFixed(1);
 
     const name = data.name;
@@ -14,7 +17,10 @@ export default function Card(props) {
     switch (view) {
       case "eat":
         return (
-          <div className="flex flex-col min-w-full gap-3 p-5 bg-white rounded-md shadow-2xl lg:gap-0 lg:justify-between lg:flex-row">
+          <Link
+            href={"/app/eat/" + id}
+            className="flex flex-col min-w-full gap-3 p-5 transition-transform duration-300 bg-white rounded-md shadow-2xl lg:gap-0 lg:justify-between lg:flex-row hover:scale-105"
+          >
             <div className="flex flex-col gap-3 lg:gap-10 lg:flex-row">
               <div className="flex flex-row items-center gap-3 lg:flex-col">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -91,13 +97,16 @@ export default function Card(props) {
                 </svg>
               </div>
             </div>
-          </div>
+          </Link>
         );
       case "do":
         break;
       case "stay":
         return (
-          <div className="flex flex-col min-w-full gap-3 p-5 bg-white rounded-md shadow-2xl lg:gap-0 lg:justify-between lg:flex-row">
+          <Link
+            href={"/app/stay/" + id}
+            className="flex flex-col min-w-full gap-3 p-5 transition-transform duration-300 bg-white rounded-md shadow-2xl lg:gap-0 lg:justify-between lg:flex-row hover:scale-105"
+          >
             <div className="flex flex-col gap-3 lg:gap-10 lg:flex-row">
               <div className="flex flex-row items-center gap-3 lg:flex-col">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +161,7 @@ export default function Card(props) {
                 </svg>
               </div>
             </div>
-          </div>
+          </Link>
         );
     }
   } else
