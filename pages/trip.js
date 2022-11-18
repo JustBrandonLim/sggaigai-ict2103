@@ -58,17 +58,17 @@ export default function CreateTrip() {
           </div>
         </PageHeader>
 
-        <div className="flex flex-col items-center justify-start gap-3 px-40 py-10 bg-gray-100">
+        <ol className="flex flex-col items-center justify-start gap-3 px-40 py-10 bg-gray-100">
           <div className="max-w-2xl gap-3">
-            {tripData[0][0].date != dateTrip.startDate ? <EmptyTrip/> : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={true} />)}
+            {tripData[0][0].date != dateTrip.startDate ? <EmptyTrip/> : [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={false} />)}
           </div>
-        </div>
+        </ol>
 
         <div className="flex flex-col items-center justify-end gap-2 px-40 py-10 md:flex-row md:gap-2">
           <button onClick={() => setDateTrip({startDate: incr_date(dateTrip.startDate)})} type="submit" className="px-6 py-2 transition-colors duration-150 bg-white border-2 rounded-smpx-10 text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
             Next Day
           </button>
-          <Link href="/editTrip">
+          <Link href="/manageTrip">
             <button type="submit" className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
               Create / Edit Trip
             </button>

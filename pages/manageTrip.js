@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Layout from "../layouts/Layout";
-import Card from "../components/TripCard";
-import Link from "next/link";
+import TripCardForm from "../components/TripCardForm";
 import PageHeader from "../components/PageHeader";
 
-export default function EditTrip() {
+export default function ManageTrip() {
   const [tripData, setTripData] = useState(
     [
       [{ stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
@@ -29,9 +28,9 @@ export default function EditTrip() {
               <p className="text-sm text-gray-500 md:text-base">Edit your trip here</p>
           </div> */}
         <PageHeader
-          breadCrumbItems={['Home', 'View Trip', 'Edit Trip']}
-          header='Edit Trip'
-          description='Edit your trip here'
+          breadCrumbItems={['Home', 'View Trip', 'Manage Trip']}
+          header='Manage Trip'
+          description='Manage your trip here'
         />
 
         <section className="grid grid-flow-row bg-gray-100 edit-trip-grid-wrapper">
@@ -39,15 +38,16 @@ export default function EditTrip() {
             <div className="container flex flex-col items-start justify-start pb-5">
               <h3 className="text-xl font-medium">Current Trip</h3>
               <p className="text-sm text-gray-500 md:text-base">The current timeline for the selected date</p>
+              <p className="text-sm text-gray-500 md:text-base">Select a stop to edit it!</p>
             </div>
             <div className="max-w-2xl gap-3">
-              {[...Array(tripData.length)].map((e, i) => <Card view={"edit"} tripData={tripData[i]} id={i} key={i} loading={true} />)}
+              {[...Array(tripData.length)].map((e, i) => <TripCardForm view={"edit"} tripData={tripData[i]} id={i} key={i} loading={false} />)}
             </div>
           </div>
           <div className="px-20 py-10">
             <form className="flex flex-col justify-center h-full min-w-full text-justify bg-white border-2 rounded-md shadow-lg bs-gray-150">
               <div className="p-5 bg-gray-50">
-                <h3 className="font-medium">Stop selected</h3>
+                <h3 className="font-medium">Add a Stop to your Trip</h3>
               </div>
               <div className="flex-grow px-5 py-1">
                 <div className="py-4 input-group">
@@ -97,11 +97,8 @@ export default function EditTrip() {
                 <a href="/trip" className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
                   Back
                 </a>
-                <button type="submit" className="px-10 py-2 transition-colors duration-150 bg-white border-2 rounded-sm text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
+                <button type="submit" className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
                   Create New Stop
-                </button>
-                <button type="submit" onClick={() => setStatus("edit")} className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
-                  Save Edits
                 </button>
               </div>
             </form>
