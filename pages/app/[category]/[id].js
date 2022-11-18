@@ -2,9 +2,18 @@ const { connectToDatabase } = require("../../../libs/mongodb");
 
 import Layout from "../../../layouts/Layout";
 
+import { useRouter } from "next/router";
 import Image from "next/image";
+import { useEffect } from "react";
+import { getLoggedIn } from "../../../libs/auth";
 
 export default function Item(props) {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!getLoggedIn()) router.push("/");
+  }, []);
+
   const view = props.category;
   const data = JSON.parse(props.data);
 

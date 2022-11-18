@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-
+import { useEffect } from "react";
 import Layout from "../layouts/Layout";
-
+import { getLoggedIn } from "../libs/auth";
 import Image from "next/image";
 
 import SGGaiGaiColoured from "../assets/SGGaiGai-Coloured.svg";
@@ -10,7 +10,11 @@ import Link from "next/link";
 export default function Register() {
   const router = useRouter();
 
-  const handleSubmit = async (event) => {
+  useEffect(() => {
+    if (getLoggedIn()) router.push("/app");
+  }, []);
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const email = event.target.querySelector("#email").value;
@@ -24,7 +28,7 @@ export default function Register() {
       await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, password: password, firstName: firstName, lastName: lastName }),
+        body: JSON.stringify({ email: email, password: password, firstName: firstName, lastName: lastName, isAdmin: 0 }),
       })
         .then((response) => response.json())
         .then((result) => {
@@ -34,10 +38,10 @@ export default function Register() {
             alert("Something went wrong!");
           }
         });
-  };
+  }
 
   return (
-    <Layout loggedIn={false}>
+    <Layout>
       <section className="container p-5">
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />

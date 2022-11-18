@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-
+import { getLoggedIn } from "../libs/auth";
 import Layout from "../layouts/Layout";
 
 import Image from "next/image";
@@ -10,29 +11,34 @@ import Link from "next/link";
 export default function Home() {
   const router = useRouter();
 
-  const handleSubmit = async (event) => {
+  useEffect(() => {
+    if (getLoggedIn()) router.push("/app");
+  }, []);
+
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const email = event.target.querySelector("#email").value;
     const password = event.target.querySelector("#password").value;
 
-    await fetch("/api/login", {
+    await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result["results"] == true) {
+        console.log(result);
+        if (getLoggedIn()) {
           router.push("/app");
         } else {
           alert("Incorrect username or password!");
         }
       });
-  };
+  }
 
   return (
-    <Layout loggedIn={false}>
+    <Layout>
       <section className="container p-5">
         <div className="flex flex-col items-center justify-center gap-3 text-center">
           <Image src={SGGaiGaiColoured} alt="SGGaiGai's Logo" />
@@ -60,7 +66,6 @@ export default function Home() {
           </p>
         </form>
       </section>
-      {/*<p>Name: {data.message[0].name}</p>*/}
     </Layout>
   );
 }

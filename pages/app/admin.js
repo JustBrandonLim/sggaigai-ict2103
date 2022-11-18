@@ -1,17 +1,29 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { getLoggedIn, getUserData } from "../../libs/auth";
 import Layout from "../../layouts/Layout";
+import { useRouter } from "next/router";
 
 export default function Admin() {
-  const [profileData, setProfileData] = useState(null);
+  const router = useRouter();
+
+  const [userData, setUserData] = useState(false);
+
+  useEffect(() => {
+    if (!getLoggedIn()) router.push("/");
+    else setUserData(getUserData());
+  }, []);
+
+  useEffect(() => {
+    if (userData.isAdmin == 0) router.push("/app");
+  }, [userData]);
 
   return (
-    <Layout loggedIn={true} view={"eat"} admin={true}>
+    <Layout view={"eat"}>
       <section>
         <div className="bg-white">
           <div className="container flex flex-col items-start justify-center px-5 py-20">
             <h2 className="flex items-center text-2xl font-bold">
-              Welcome back, {profileData ? profileData.name : <div className="w-20 h-2 ml-2 bg-gray-500 rounded animate-pulse"></div>}.
+              Welcome back, {userData != false ? userData.firstName : <div className="w-20 h-2 ml-2 bg-gray-500 rounded animate-pulse"></div>}.
             </h2>
             <p className="mt-5 text-sgg-gray text-md">What would you like to do today?</p>
           </div>

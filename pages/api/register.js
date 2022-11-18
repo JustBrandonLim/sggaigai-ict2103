@@ -11,11 +11,12 @@ export default async function RegisterHandler(req, res) {
         try {
           let { db } = await connectToDatabase();
 
-          let [results] = await db.execute("INSERT INTO user (email, password, firstName, lastName) VALUES (?, ?, ?, ?)", [
+          let [results] = await db.execute("INSERT INTO user (email, password, firstName, lastName, isAdmin) VALUES (?, ?, ?, ?, ?)", [
             req.body["email"],
             req.body["password"],
             req.body["firstName"],
             req.body["lastName"],
+            req.body["isAdmin"],
           ]);
 
           if (results["affectedRows"] == 1) res.status(200).json({ results: true, success: true });

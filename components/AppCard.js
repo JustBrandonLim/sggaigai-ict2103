@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Card(props) {
+export default function AppCard(props) {
   const data = props.data;
   const view = props.view;
 

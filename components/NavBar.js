@@ -1,11 +1,37 @@
+import { getLoggedIn, getUserData } from "../libs/auth";
+
 import Image from "next/image";
 
 import SGGaiGaiColoured from "../assets/SGGaiGai-White.svg";
 import Link from "next/link";
 
 import NavItem from "../components/NavItem";
+import { useRouter } from "next/router";
 
 export default function NavBar(props) {
+  const router = useRouter();
+
+  async function handleLogout(event) {
+    event.preventDefault();
+
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(getUserData()),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (!getLoggedIn()) {
+          alert("You have logged out successfully!");
+          router.push("/");
+        }
+      });
+  }
+
+  const userData = getUserData();
+
+  const isAdmin = userData.isAdmin;
+
   return (
     <nav
       className={`${
@@ -50,7 +76,7 @@ export default function NavBar(props) {
             </svg>
             Account
           </NavItem>
-          {props.admin ? (
+          {isAdmin == 1 ? (
             <NavItem href="/app/admin">
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -64,7 +90,7 @@ export default function NavBar(props) {
               Admin
             </NavItem>
           ) : null}
-          <NavItem href="/app/profile">
+          <button onClick={handleLogout}>
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path
                 strokeLinecap="round"
@@ -73,7 +99,7 @@ export default function NavBar(props) {
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
               />
             </svg>
-          </NavItem>
+          </button>
         </ul>
       </div>
     </nav>
