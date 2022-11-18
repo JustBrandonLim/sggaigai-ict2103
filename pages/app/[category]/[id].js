@@ -30,7 +30,7 @@ export default function Item(props) {
         <div className="container relative flex flex-col items-start min-h-full gap-5 px-5 py-5 lg:flex-row">
           <Image src={image} alt={name + " Image"} className="object-cover h-96 w-96" width={0} height={0} sizes="100vw" />
           <div className="grid w-full grid-cols-1 gap-5 lg:grid-cols-2">
-            {view == "eat" ? (
+            {view == "eat" || view == "do" ? (
               <div>
                 <h4 className="font-semibold">Opening Hours</h4>
                 <div className="mt-3">
@@ -39,7 +39,7 @@ export default function Item(props) {
                   ))}
                 </div>
               </div>
-            ) : view == "do" ? null : (
+            ) : (
               <div>
                 <h4 className="font-bold">Stars</h4>
                 <p className="mt-3">{stars} star hotel</p>
@@ -61,7 +61,7 @@ export default function Item(props) {
                 </span>
               </p>
             </div>
-            {view == "eat" ? (
+            {view == "eat" || view == "do" ? (
               <div>
                 <h4 className="font-semibold">Price</h4>
                 <div className="flex items-center mt-3">
@@ -88,7 +88,7 @@ export default function Item(props) {
                   )}
                 </div>
               </div>
-            ) : view == "do" ? null : null}
+            ) : null}
             <div>
               <h4 className="font-semibold">Contact</h4>
               <p className="mt-3">{contact ? contact : "Not Available"}</p>
