@@ -54,12 +54,12 @@ export default function TripCardForm(props) {
     else
       return (
       <>
-        <li className="grid grid-flow-row py-2 trip-grid-wrapper hover:cursor-pointer" onClick={() => activeNode != -1 ? setActiveNode(-1) : setActiveNode(props.id)}>
-          <div className="relative flex-row text-right whitespace-nowrap">
-              <p className="font-bold font-xl">{props.tripData[0].stopName}</p>
-              <p className="font-md">{props.tripData[0].time}</p>
+        <li className="grid grid-cols-1 py-2 md:grid-flow-row trip-grid-wrapper" onClick={() => activeNode != -1 ? setActiveNode(-1) : setActiveNode(props.id)}>
+          <div className="relative flex-row text-center md:text-right whitespace-nowrap">
+              <p className="font-bold">{props.tripData[0].stopName}</p>
+              <p className="">{props.tripData[0].time}</p>
           </div>
-              <div className="items-center justify-center align-middle">
+              <div className="flex flex-col items-center justify-center md:block">
                   <svg className={`${
                           props.id == activeNode ? "animate-pulse" : ""
                         } timeline-circle`} height="20" width="60">
@@ -68,11 +68,11 @@ export default function TripCardForm(props) {
                           props.view == "edit" ? activeColor : strokeColor
                         }`} strokeWidth="3" fill="white"/>
                   </svg>  
-                  <div class="hidden sm:flex w-0.5 bg-gray-200 h-full m-auto"></div>
+                  <div class="hidden md:flex w-0.5 bg-gray-200 h-full m-auto"></div>
               </div>
-          <div className="invisible text-left break-words md:visible">
-              <p className="font-bold font-xl">{props.tripData[0].eventName}</p>
-              <p className="font-md">{props.tripData[0].vicinity}</p>
+          <div className="text-center break-words md:text-left">
+              <p className="font-bold">{props.tripData[0].eventName}</p>
+              <p className="">{props.tripData[0].vicinity}</p>
           </div>
         </li>
           {activeNode == props.id ? (

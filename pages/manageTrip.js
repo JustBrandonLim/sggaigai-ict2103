@@ -33,9 +33,9 @@ export default function ManageTrip() {
           description='Manage your trip here'
         />
 
-        <section className="grid grid-flow-row bg-gray-100 edit-trip-grid-wrapper">
-          <div className="flex flex-col items-center justify-start gap-3 py-10 pl-32">
-            <div className="container flex flex-col items-start justify-start pb-5">
+        <section className="grid-flow-row bg-gray-100 md:grid edit-trip-grid-wrapper">
+          <div className="flex flex-col items-center justify-start gap-3 py-10 mx-32">
+            <div className="container flex flex-col items-center justify-start pb-5 md:items-start">
               <h3 className="text-xl font-medium">Current Trip</h3>
               <p className="text-sm text-gray-500 md:text-base">The current timeline for the selected date</p>
               <p className="text-sm text-gray-500 md:text-base">Select a stop to edit it!</p>

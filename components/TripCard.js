@@ -3,7 +3,7 @@ let strokeColor = "orange";
 let activeColor = "grey";
 
 export default function TripCard(props) {
-    const [activeNode, setActiveNode] = useState(0);
+    const [activeNode, setActiveNode] = useState(-1);
 
     if (activeNode == props.id)
     {
@@ -52,23 +52,23 @@ export default function TripCard(props) {
       );
     else
       return (
-      <li className="grid grid-flow-row py-2 trip-grid-wrapper" onClick={() => setActiveNode(props.id)}>
-        <div className="relative flex-row text-right whitespace-nowrap">
+      <li className="grid grid-cols-1 py-2 md:grid-flow-row trip-grid-wrapper" onClick={() => setActiveNode(props.id)}>
+        <div className="relative flex-row text-center md:text-right whitespace-nowrap">
             <p className="font-bold font-xl">{props.tripData[0].stopName}</p>
             <p className="font-md">{props.tripData[0].time}</p>
         </div>
-            <div className="items-center justify-center align-middle">
+            <div className="flex flex-col items-center justify-center md:block">
                 <svg className={`${
                         props.id == activeNode ? "animate-pulse" : ""
                       } timeline-circle`} height="20" width="60">
                     <circle cx="50" cy="10" r="5" stroke=
                     {`${
                         props.view == "edit" ? activeColor : strokeColor
-                      }`} strokeWidth="3" fill="white"/>
+                      } `} strokeWidth="3" fill="white"/>
                 </svg>  
-                <div class="hidden sm:flex w-0.5 bg-gray-200 h-full m-auto"></div>
+                <div class="hidden md:flex w-0.5 bg-gray-200 h-full m-auto"></div>
             </div>
-        <div className="invisible text-left break-words md:visible">
+        <div className="text-center break-words md:text-left">
             <p className="font-bold font-xl">{props.tripData[0].eventName}</p>
             <p className="font-md">{props.tripData[0].vicinity}</p>
         </div>

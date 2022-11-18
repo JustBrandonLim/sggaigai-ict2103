@@ -9,7 +9,7 @@ export default function NavBar(props) {
   return (
     <nav
       className={`${
-        props.view == "trip" ? "bg-sgg-black" : props.view == "eat" ? "bg-sgg-orange" : props.view == "do" ? "bg-sgg-yellow" : "bg-sgg-green"
+        props.view == "trip" ? "bg-[#A77E5A]" : props.view == "eat" ? "bg-sgg-orange" : props.view == "do" ? "bg-sgg-yellow" : "bg-sgg-green"
       } transition-colors hover:duration-300`}
     >
       <div className="container flex items-center justify-between px-5 py-3 text-white md:px-0">

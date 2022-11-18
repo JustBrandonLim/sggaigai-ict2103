@@ -4,8 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.trip-grid-wrapper {
-    grid-template-columns: 1fr 60px 1fr;
+
+@media (min-width: 768px){
+    .trip-grid-wrapper {
+        grid-template-columns: 1fr 60px 1fr;
+    }
 }
 
 .timeline-circle {
