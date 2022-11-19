@@ -15,4 +15,10 @@ MONGO_DB_URI=mongodb+srv://Admin:cDldWFrynYgtuBKJ@sggaigai-ict2103.nmawej7.mongo
 MONGO_DB_NAME=SGGAIGAI
 
 MYSQL_DB_URI=mysql://7edib6e99krtvzi5172b:pscale_pw_P5HQNZmeeQkWuIVTqzO3tT2UP8FCAdMk5O8pYz7ZsnE@ap-southeast.connect.psdb.cloud/sggaigai?ssl={"rejectUnauthorized":true}
+
+MYSQL_DB_HOST=database2103.c3aflkblaeur.ap-northeast-1.rds.amazonaws.com
+MYSQL_DB_PORT=3306
+MYSQL_DB_DATABASE=sys
+MYSQL_DB_USER=admin
+MYSQL_DB_PASSWORD=password1
 ```
