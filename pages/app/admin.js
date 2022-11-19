@@ -25,7 +25,7 @@ export default function Admin() {
             <h2 className="flex items-center text-2xl font-bold">
               Welcome back, {userData != false ? userData.firstName : <div className="w-20 h-2 ml-2 bg-gray-500 rounded animate-pulse"></div>}.
             </h2>
-            <p className="mt-5 text-sgg-gray text-md">What would you like to do today?</p>
+            <p className="mt-5 text-sgg-gray text-md">Make changes to the system here!</p>
           </div>
         </div>
         <div className="container grid grid-cols-1 gap-5 px-10 py-5 lg:grid-cols-2">

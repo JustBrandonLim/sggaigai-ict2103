@@ -15,7 +15,7 @@ export default function Layout(props) {
       <header>{isLoggedIn ? <NavBar view={props.view} /> : null}</header>
       <main>{props.children}</main>
       <footer>
-        <Footer view={props.loggedIn ? props.view : null} />
+        <Footer view={isLoggedIn ? props.view : null} />
       </footer>
     </>
   );

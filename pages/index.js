@@ -46,10 +46,10 @@ export default function Home() {
         </div>
         <form className="flex flex-col w-2/3 max-w-sm gap-5 mx-auto mt-10" onSubmit={handleSubmit}>
           <p className="font-bold">Login</p>
-          <input id="email" type="email" placeholder="Email" className="p-2 focus:outline-sgg-blue" />
-          <input id="password" type="password" placeholder="Password" className="p-2 focus:outline-sgg-blue" />
+          <input id="email" type="email" placeholder="Email" className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
+          <input id="password" type="password" placeholder="Password" className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row md:gap-0">
-            <button type="submit" className="px-5 py-2 text-white transition-colors duration-150 bg-sgg-blue hover:bg-sgg-blue/80">
+            <button type="submit" className="px-5 py-2 text-white transition-colors duration-150 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80">
               Sign In
             </button>
             <label className="flex items-center">

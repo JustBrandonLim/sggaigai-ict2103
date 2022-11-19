@@ -20,6 +20,7 @@ module.exports = {
         "sgg-black": "#262626",
         "sgg-gray": "#8c8c8c",
         "sgg-brown": "#a77e5a",
+        "sgg-input-gray": "#d9d9d9",
       },
     },
   },
