@@ -35,7 +35,15 @@ export default function NavBar(props) {
   return (
     <nav
       className={`${
-        props.view == "trip" ? "bg-sgg-black" : props.view == "eat" ? "bg-sgg-orange" : props.view == "do" ? "bg-sgg-yellow" : "bg-sgg-green"
+        props.view == "trip"
+          ? "bg-sgg-brown"
+          : props.view == "eat"
+          ? "bg-sgg-orange"
+          : props.view == "do"
+          ? "bg-sgg-yellow"
+          : props.view == "stay"
+          ? "bg-sgg-green"
+          : "bg-sgg-black"
       } transition-colors duration-300`}
     >
       <div className="container flex items-center justify-between px-5 py-3 text-white">
@@ -65,7 +73,7 @@ export default function NavBar(props) {
             </svg>
             Trips
           </NavItem>
-          <NavItem href="/app/profile">
+          <NavItem href="/app/account">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path
                 strokeLinecap="round"

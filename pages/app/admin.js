@@ -18,7 +18,7 @@ export default function Admin() {
   }, [userData]);
 
   return (
-    <Layout view={"eat"}>
+    <Layout view="default">
       <section>
         <div className="bg-white">
           <div className="container flex flex-col items-start justify-center px-5 py-20">
