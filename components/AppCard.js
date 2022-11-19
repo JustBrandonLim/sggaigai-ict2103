@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
 export default function AppCard(props) {
   const data = props.data;
