@@ -11,6 +11,30 @@ export default function Account() {
     if (!getLoggedIn()) router.push("/");
     else setUserData(getUserData());
   }, []);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const password = event.target.querySelector("#password").value;
+    const confirmPassword = event.target.querySelector("#confirmPassword").value;
+
+    if (password != confirmPassword) alert("Please ensure that your password matches!");
+    else {
+      await fetch("/api/profile/changePassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userData.email, password: password }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result["results"] == true) {
+            alert("Password changed!");
+            router.push("/app");
+          } else alert("Something went wrong!");
+        });
+    }
+  }
+
   return (
     <Layout view="default">
       <section>
@@ -23,7 +47,7 @@ export default function Account() {
           </div>
         </div>
         <div className="container flex justify-center gap-5 px-10 py-5">
-          <div className="w-full max-w-lg p-5 bg-white rounded-md shadow-2xl">
+          <form onSubmit={handleSubmit} className="w-full max-w-lg p-5 bg-white rounded-md shadow-2xl">
             <h6 className="font-semibold">Change Password</h6>
             <div className="flex flex-col gap-5 mt-10">
               <input
@@ -42,7 +66,7 @@ export default function Account() {
                 Change Password
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
     </Layout>

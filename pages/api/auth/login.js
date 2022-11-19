@@ -20,7 +20,7 @@ export default async function LoginHandler(req, res) {
           if (results.length == 1) {
             setCookie("userData", JSON.stringify(results[0]), { req, res, maxAge: 3600, path: "/", sameSite: true });
             res.status(200).json(JSON.stringify(results[0]));
-          }
+          } else res.status(200).json({ message: "Login failed!", success: false });
         } catch (error) {
           res.status(200).json({ message: new Error(error).message, success: false });
         }

@@ -13,8 +13,13 @@ export async function connectToDatabase() {
   //connection = await mysql.createConnection(process.env.MYSQL_DB_URI);
 
   //For AWS RDS ( Amazon Server )
-  connection = await mysql.createConnection({host: MYSQL_HOST, user: MYSQL_USER, database: MYSQL_DATABASE, password: MYSQL_PASSWORD, port: MYSQL_PORT});
-  console.log("Trying to connect");
+  connection = await mysql.createConnection({
+    host: MYSQL_HOST,
+    user: MYSQL_USER,
+    database: MYSQL_DATABASE,
+    password: MYSQL_PASSWORD,
+    port: MYSQL_PORT,
+  });
   return {
     db: connection,
   };

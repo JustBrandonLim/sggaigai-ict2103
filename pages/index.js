@@ -28,7 +28,6 @@ export default function Home() {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (getLoggedIn()) {
           router.push("/app");
         } else {

@@ -33,10 +33,9 @@ export default function Register() {
         .then((response) => response.json())
         .then((result) => {
           if (result["results"] == true) {
+            alert("Account created!");
             router.push("/");
-          } else {
-            alert("Something went wrong!");
-          }
+          } else alert("Something went wrong!");
         });
   }
 

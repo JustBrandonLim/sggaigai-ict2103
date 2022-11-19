@@ -3,8 +3,6 @@ const { connectToDatabase, closeConnection } = require("../../libs/mysql");
 export default async function RegisterHandler(req, res) {
   switch (req.method) {
     case "POST":
-      console.log(JSON.stringify(req.body));
-
       if (!req.body["email"] || !req.body["password"] || !req.body["firstName"] || !req.body["lastName"])
         res.status(200).json({ results: false, success: true });
       else {
