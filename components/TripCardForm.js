@@ -6,16 +6,31 @@ export default function TripCardForm(props) {
     const [charCount, setCharCount] = useState(0);
     const [activeNode, setActiveNode] = useState(-1);
 
+    //converts mySQL time to a 12 hour format
+    function convertTo12Time(timing) {
+      if (timing) {
+        const timeArray = timing.split(":");
+        let hour = parseInt(timeArray[0]);
+        let AMorPM = " am";
+        if (parseInt(timeArray[0]) > 12) {
+          hour -= 12;
+          AMorPM = " pm";
+        }
+        const time = hour.toString() + ":" + timeArray[1].toString() + AMorPM;
+        return time;
+      }
+    }
+
     if (activeNode == props.id)
     {
-        switch(props.tripData[0].action) {
-            case 'eat':
+        switch(props.tripData["place_type"]) {
+            case 'EAT':
                 activeColor = "#CC715A";
                 break;
-            case 'do':
+            case 'DO':
                 activeColor = "#C99F38";
                 break;
-            case 'stay':
+            case 'STAY':
                 activeColor = "#264653";
                 break;
             default:
@@ -27,14 +42,14 @@ export default function TripCardForm(props) {
         activeColor = "grey";
     };
 
-    switch(props.tripData[0].action) {
-        case 'eat':
+    switch(props.tripData["place_type"]) {
+        case 'EAT':
             strokeColor = "#CC715A";
           break;
-        case 'do':
+        case 'DO':
             strokeColor = "#C99F38";
           break;
-        case 'stay':
+        case 'STAY':
             strokeColor = "#264653";
           break;
         default:
@@ -56,8 +71,8 @@ export default function TripCardForm(props) {
       <>
         <li className="grid grid-cols-1 py-2 md:grid-flow-row trip-grid-wrapper" onClick={() => activeNode != -1 ? setActiveNode(-1) : setActiveNode(props.id)}>
           <div className="relative flex-row text-center md:text-right whitespace-nowrap">
-              <p className="font-bold">{props.tripData[0].stopName}</p>
-              <p className="">{props.tripData[0].time}</p>
+              <p className="font-bold">{props.tripData["stop_name"]}</p>
+              <p className="">{convertTo12Time(props.tripData["stop_time"])}</p>
           </div>
               <div className="flex flex-col items-center justify-center md:block">
                   <svg className={`${
@@ -71,8 +86,8 @@ export default function TripCardForm(props) {
                   <div class="hidden md:flex w-0.5 bg-gray-200 h-full m-auto"></div>
               </div>
           <div className="text-center break-words md:text-left">
-              <p className="font-bold">{props.tripData[0].eventName}</p>
-              <p className="">{props.tripData[0].vicinity}</p>
+              <p className="font-bold">{props.tripData["place_name"]}</p>
+              <p className="">{props.tripData["place_address"]}</p>
           </div>
         </li>
           {activeNode == props.id ? (
@@ -82,7 +97,7 @@ export default function TripCardForm(props) {
                 <div className="relative flex items-center justify-start px-20 py-10">
                   <form className="flex flex-col justify-center h-full min-w-full text-justify bg-white border-2 rounded-md shadow-lg bs-gray-150">
                     <div className="p-5 bg-gray-50">
-                      <h3 className="font-medium">Editing {props.tripData[0].stopName} at {props.tripData[0].eventName}</h3>
+                      <h3 className="font-medium">Editing {props.tripData["stop_name"]} at {props.tripData["place_name"]}</h3>
                     </div>
                     <div className="flex-grow px-5 py-1">
                       <div className="py-4 input-group">

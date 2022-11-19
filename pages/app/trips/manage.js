@@ -1,28 +1,75 @@
 import { useState, useEffect } from "react";
+import { useLocation } from 'react-router';
+import { useRouter } from "next/router";
 import Layout from "../../../layouts/Layout";
 import TripCardForm from "../../../components/TripCardForm";
+import { getLoggedIn, getUserData } from "../../../libs/auth";
 import PageHeader from "../../../components/PageHeader";
 
 export default function Manage() {
-  const [tripData, setTripData] = useState([
-    [{ stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
-    [{ stopName: "Shopping", time: "11 00 a.m", action: "do", eventName: "Resort World Sentosa", vicinity: "RWS" }],
-    [{ stopName: "Lunch", time: "12 30 p.m", action: "eat", eventName: "Two Chefs Bar", vicinity: "31 Ocean Way, # 01 - 11 Quayside Isle" }],
-    [{ stopName: "Check In", time: "2 p.m", action: "stay", eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane" }],
-    [
-      {
-        stopName: "Concert night!!",
-        time: "06 00 p.m",
-        action: "do",
-        eventName: "Boys Like Girls Live In Singapore 2022: Self Title",
-        vicinity: "The Coliseum (TM), Hard Rock Hotel Singapore, Resorts World (TM) Sentosa * Singapore",
-      },
-    ],
-    [{ stopName: "Dinner", time: "09 00 p.m", action: "eat", eventName: "Wing Choi", vicinity: "8 Sentosa Gateway" }],
-  ]); // sample results from database
+  const router = useRouter();
+  const [userData, setUserData] = useState(false);
+  const [selectedDate, setselectedDate] = useState('');
+  const [tripData, setTripData] = useState([])
   const [charCount, setCharCount] = useState(0);
 
-  useEffect(() => {}, []);
+  //get current user
+  useEffect(() => {
+    if (!getLoggedIn()) {
+      router.push("/");
+    }
+    else {
+      setUserData(getUserData());
+    }
+  }, []);
+
+  //handles upon page start
+  useEffect(() => {
+    let user;
+    if (!getLoggedIn()) {
+      router.push("/");
+    }
+    else {
+      user = getUserData();
+      setUserData(getUserData());
+    }
+
+    const email = user.email;
+    let date = (new URLSearchParams(window.location.search)).get("date");
+    setselectedDate(date);
+    fetch(`../../api/trips/trips?email=${email}&date=${date}`)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.message.length != 0) {
+          setTripData(result.message); //sets the new result
+        }
+        else {
+          setTripData([])
+        }
+      });
+  },[]);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const stopName = event.target.querySelector("#stopname").value;
+    const eventName = event.target.querySelector("#eventname").value;
+    const Time = event.target.querySelector("#time").value;
+    const Vicinity = event.target.querySelector("#Vicinity").value;
+
+    await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: password, firstName: firstName, lastName: lastName, isAdmin: 0 }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result["results"] == true) {
+          alert("Account created!");
+          router.push("/");
+        } else alert("Something went wrong!");
+      });
+  }
 
   return (
     <Layout view={"trip"} loggedIn={true}>

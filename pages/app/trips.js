@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Layout from "../../layouts/Layout";
 import Card from "../../components/TripCard";
 import EmptyTrip from "../../components/EmptyTrip";
 import Link from "next/link";
+import { getLoggedIn, getUserData } from "../../libs/auth";
 import PageHeader from "../../components/PageHeader";
 
 export default function Trips() {
+  const router = useRouter();
+  const [userData, setUserData] = useState(false);
   const [dateTrip, setDateTrip] = useState({ startDate: "2022-11-01" });
   const [tripData, setTripData] = useState([
     [{ date: "2022-11-20", stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
@@ -33,9 +37,43 @@ export default function Trips() {
     ],
     [{ date: "2022-11-20", stopName: "Dinner", time: "09 00 p.m", action: "eat", eventName: "Wing Choi", vicinity: "8 Sentosa Gateway" }],
   ]); // sample results from database
+
+  useEffect(() => {
+    if (!getLoggedIn()) {
+      router.push("/");
+    }
+    else {
+      setUserData(getUserData());
+    }
+  }, []);
+
   useEffect(() => {
     // console.log(incr_date(dateTrip.startDate));
   }, [dateTrip]);
+
+  //handles finding of data on data change
+  useEffect(() => {
+    //event.preventDefault();
+    const email = userData.email;
+    const date = dateTrip.startDate;
+
+    fetch(`../api/trips/trips?email=${email}&date=${date}`)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.message);
+        if (result.message.length != 0) {
+          setTripData(result.message); //sets the new result
+        }
+        else {
+          setTripData([])
+        }
+      });
+  }, [dateTrip]);
+  
+  //exporting data to the next page
+  function selectedDate() {
+    window.location.href = "/app/trips/manage?date=" + dateTrip.startDate;
+  }
 
   function incr_date(date_str) {
     var parts = date_str.split("-");
@@ -75,7 +113,7 @@ export default function Trips() {
 
         <ol className="flex flex-col items-center justify-start gap-3 px-40 py-10 bg-gray-100">
           <div className="max-w-2xl gap-3">
-            {tripData[0][0].date != dateTrip.startDate ? (
+            {tripData.length == 0 ? (
               <EmptyTrip />
             ) : (
               [...Array(tripData.length)].map((e, i) => <Card tripData={tripData[i]} id={i} key={i} loading={false} />)
@@ -91,7 +129,7 @@ export default function Trips() {
           >
             Next Day
           </button>
-          <Link href="/app/trips/manage">
+          <Link href={{pathname: '/app/trips/manage', query: {date: dateTrip.startDate}}}>
             <button className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
               Create / Edit Trip
             </button>
