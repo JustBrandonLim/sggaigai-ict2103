@@ -3,3 +3,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (min-width: 768px) {
+  .trip-grid-wrapper {
+    grid-template-columns: 1fr 60px 1fr;
+  }
+}
+
+.timeline-circle {
+  transform: translateX(-20px);
+}
+
+.edit-trip-grid-wrapper {
+  grid-template-columns: auto 60%;
+}
