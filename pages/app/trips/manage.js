@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { useLocation } from 'react-router';
 import { useRouter } from "next/router";
 import Layout from "../../../layouts/Layout";
@@ -10,9 +10,39 @@ import Link from "next/link";
 export default function Manage() {
   const router = useRouter();
   const [userData, setUserData] = useState(false);
-  const [selectedDate, setselectedDate] = useState('');
-  const [tripData, setTripData] = useState([])
-  const [charCount, setCharCount] = useState(0);
+  const [favouritesEat, setFavouritesEat] = useState(
+      [
+        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"}
+      ]
+    );
+  const [favouritesDo, setFavouritesDo] = useState(
+      [
+        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"}
+      ]
+  );
+    const [favouritesStay, setFavouritesStay] = useState(
+      [
+        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"}
+      ]
+  );
+  const [eventName, setEventName] = useState("Event");
+  const [vicinity, setVicinity] = useState("Vicinity");
+  const [priceLevel, setPriceLevel] = useState("-");
+  const [contact, setContact] = useState("-");
+  const [openingHour, setOpeningHour] = useState("-");
+  const [selectedDate, setselectedDate] = useState("");
+  const [tripData, setTripData] = useState([]);
+  const [tab, setTab] = useState(["Places to EAT", "Places to DO", "Places to STAY"]);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const [showModal, setShowModal] = useState(false);
+
+  //get data from favourites
+  useEffect(() => {
+  setEventName(favouritesDo["stopName"]);
+  setVicinity(favouritesDo["vicinity"]);
+  }, []);
+
 
   //get current user
   useEffect(() => {
@@ -75,10 +105,6 @@ export default function Manage() {
   return (
     <Layout view={"trip"} loggedIn={true}>
       <section className="inline-block w-full bg-white">
-        {/* <div className="container flex flex-col items-start justify-start gap-3 px-64 pt-20 pb-5">
-              <h2 className="text-3xl font-semibold">Edit Trip</h2>
-              <p className="text-sm text-gray-500 md:text-base">Edit your trip here</p>
-          </div> */}
         <PageHeader breadCrumbItems={["Home", "View Trip", "Manage Trip"]} header="Manage Trip" description="Manage your trip here" />
 
         <section className="grid-flow-row bg-gray-100 md:grid edit-trip-grid-wrapper">
@@ -103,11 +129,10 @@ export default function Manage() {
               <div className="py-4 input-group">
                   <div className="flex flex-row pb-1">
                     <h4 className="w-2/3">Stop Name</h4>
-                    <h4 className="w-1/3 pl-2">Type</h4>
                   </div>
                   <div className="flex flex-row gap-4 ">
                     <input type="text" placeholder="Stop Name" className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
-                    <input type="text" placeholder="Eat/Do/Stay" className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
+                    <button onClick={()=> setShowModal(true)} type="button" className="flex w-1/3 px-10 py-2 text-sm font-medium transition-colors duration-150 bg-white border-2 rounded-sm text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue" required>Select From Favourites</button>
                   </div>
                 </div>
                 <div className="py-4 input-group">
@@ -116,21 +141,17 @@ export default function Manage() {
                     <h4 className="w-1/3 pl-2">Time</h4>
                   </div>
                   <div className="flex flex-row gap-4 ">
-                    <input type="text" placeholder="Event Name" className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
-                    <input type="text" placeholder="Time" className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
+                    <input type="text" value={eventName} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" disabled />
+                    <input type="time" placeholder="Time" className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
                   </div>
                 </div>
                 <div className="py-4 input-group">
                   <h4 className="pb-1">Vicinity</h4>
-                  {/* <input type="text" placeholder="Vicinity" className="w-full p-2 border-2 rounded-md focus:outline-sgg-blue" required /> */}
                   <textarea
-                    placeholder="Vicinity"
-                    maxLength="100"
-                    onChange={(e) => setCharCount(e.target.value.length)}
+                    value={vicinity}
                     className="w-full p-2 border-2 rounded-md focus:outline-sgg-blue"
-                    required
+                    disabled
                   />
-                  <div className="text-right text-gray-300">{charCount} / 100</div>
                 </div>
                 <div className="py-4 input-group">
                   <div className="w-full h-3 border-b border-gray-300">
@@ -141,10 +162,10 @@ export default function Manage() {
                     <div className="w-full">Contact</div>
                     <div className="w-full">Opening Hour</div>
                   </div>
-                  <div className="flex flex-row text-gray-300">
-                    <div className="w-full">string</div>
-                    <div className="w-full">009009</div>
-                    <div className="w-full">time</div>
+                  <div className="flex flex-row text-black">
+                    <input type="text" className="w-full" value={priceLevel} disabled/>
+                    <input type="text" className="w-full" value={contact} disabled/>
+                    <input type="text" className="w-full" value={openingHour} disabled/>
                   </div>
                 </div>
               </div>
@@ -167,6 +188,67 @@ export default function Manage() {
 
         <div className="flex flex-col items-center justify-end gap-2 px-40 py-10 md:flex-row md:gap-2"></div>
       </section>
+
+      {showModal && (
+                <>
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
+                    >
+                        <div className="relative min-w-[640px] max-w-md mx-auto my-6">
+                            {/*content*/}
+                            <div className="relative flex flex-col w-full bg-white border-0 rounded-md shadow-lg outline-none focus:outline-none">
+                                {/*body*/}
+                                <div className="relative flex-auto py-6 px-7">
+                                        <div className="flex flex-col">
+                                            <p className="inline text-lg font-medium leading-relaxed text-black">Select Stop from Favourites</p>
+                                            <div>
+                                                <div className="py-3">
+                                                    <button onClick={() => setTabIndex(0)} className={`${tab[tabIndex] == tab[0] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[0] }`}</button>
+                                                    <button onClick={() => setTabIndex(1)} className={`${tab[tabIndex] == tab[1] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } mx-10 text-sm`}>{`${tab == 'null' ? "" : tab[1] }`}</button>
+                                                    <button onClick={() => setTabIndex(2)} className={`${tab[tabIndex] == tab[2] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[2] }`}</button>
+                                                </div>
+                                              <div className={`${ tab[tabIndex] == "Places to EAT" ? "visible" : "hidden"} bg-#f0f2f5`}>
+                                                <ol className="flex flex-col items-start justify-start">
+                                                  <div className="w-full gap-3">
+                                                  {[...Array(favouritesDo.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesDo[i]["eventName"], 
+                                                  setVicinity(favouritesDo[i]["vicinity"]), setPriceLevel(favouritesDo[i]["price_level"]), setContact(favouritesDo[i]["contact"]), setOpeningHour(favouritesDo[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesDo[i]["eventName"]} </div>)}
+                                                  </div>
+                                                </ol>
+                                              </div>
+                                              <div className={`${ tab[tabIndex] == "Places to DO" ? "visible" : "hidden"} bg-#f0f2f5`}>
+                                                <ol className="flex flex-col items-start justify-start">
+                                                  <div className="w-full gap-3">
+                                                  {[...Array(favouritesEat.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesEat[i]["eventName"], 
+                                                  setVicinity(favouritesEat[i]["vicinity"]), setPriceLevel(favouritesEat[i]["price_level"]), setContact(favouritesEat[i]["contact"]), setOpeningHour(favouritesEat[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesEat[i]["eventName"]} </div>)}
+                                                  </div>
+                                                </ol>
+                                              </div>
+                                              <div className={`${ tab[tabIndex] == "Places to STAY" ? "visible" : "hidden"} bg-#f0f2f5`}>
+                                                <ol className="flex flex-col items-start justify-start">
+                                                  <div className="w-full gap-3">
+                                                  {[...Array(favouritesStay.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesStay[i]["eventName"], 
+                                                  setVicinity(favouritesStay[i]["vicinity"]), setContact(favouritesStay[i]["contact"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesStay[i]["eventName"]} </div>)}
+                                                  </div>
+                                                </ol>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                <div className="flex items-center justify-end px-6 pb-6">
+                                        <button
+                                            className="py-2 mb-1 ml-2 mr-1 text-sm text-black transition-all duration-150 ease-linear border-2 rounded-sm shadow outline-none px-7 hover:bg-black/40 hover:shadow-lg focus:outline-none"
+                                            type="button"
+                                            onClick={() => {setShowModal(false)}}
+                                        >
+                                          Back
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
+                </>
+            )}
     </Layout>
   );
 }
