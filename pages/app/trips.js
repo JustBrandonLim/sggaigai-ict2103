@@ -8,9 +8,15 @@ import { getLoggedIn, getUserData } from "../../libs/auth";
 import PageHeader from "../../components/PageHeader";
 
 export default function Trips() {
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+let now = yyyy +'-'+ mm +'-'+ dd;
+
   const router = useRouter();
   const [userData, setUserData] = useState(false);
-  const [dateTrip, setDateTrip] = useState({ startDate: "2022-11-01" });
+  const [dateTrip, setDateTrip] = useState({ startDate: now });
   const [tripData, setTripData] = useState([
     [{ date: "2022-11-20", stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
     [{ date: "2022-11-20", stopName: "Shopping", time: "11 00 a.m", action: "do", eventName: "Resort World Sentosa", vicinity: "RWS" }],
@@ -37,7 +43,6 @@ export default function Trips() {
     ],
     [{ date: "2022-11-20", stopName: "Dinner", time: "09 00 p.m", action: "eat", eventName: "Wing Choi", vicinity: "8 Sentosa Gateway" }],
   ]); // sample results from database
-
   useEffect(() => {
     if (!getLoggedIn()) {
       router.push("/");
