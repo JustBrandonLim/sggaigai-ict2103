@@ -91,11 +91,8 @@ export default function Trips() {
           >
             Next Day
           </button>
-          <Link href="/manageTrip">
-            <button
-              type="submit"
-              className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue"
-            >
+          <Link href="/app/trips/manage">
+            <button className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
               Create / Edit Trip
             </button>
           </Link>

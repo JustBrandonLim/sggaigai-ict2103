@@ -104,7 +104,7 @@ export default function Manage() {
                 </div>
               </div>
               <div className="flex flex-col items-center justify-end gap-0 px-5 py-5 bg-gray-50 md:flex-row md:gap-3">
-                <a href="/trip" className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
+                <a href="/app/trips" className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
                   Back
                 </a>
                 <button
