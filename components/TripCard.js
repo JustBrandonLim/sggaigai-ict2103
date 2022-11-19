@@ -60,7 +60,7 @@ export default function TripCard(props) {
         <svg height="100" width="100">
             <circle cx="50" cy="50" r="8" stroke="orange" strokeWidth="6" fill="white" />
         </svg>
-          <div class="hidden sm:flex w-0.5 bg-gray-200 h-full m-auto"></div>
+          <div className="hidden sm:flex w-0.5 bg-gray-200 h-full m-auto"></div>
       </div>
 
       );
@@ -80,7 +80,7 @@ export default function TripCard(props) {
                         props.view == "edit" ? activeColor : strokeColor
                       } `} strokeWidth="3" fill="white"/>
                 </svg>  
-                <div class="hidden md:flex w-0.5 bg-gray-200 h-full m-auto"></div>
+                <div className="hidden md:flex w-0.5 bg-gray-200 h-full m-auto"></div>
             </div>
         <div className="text-center break-words md:text-left">
             <p className="font-bold font-xl">{props.tripData["place_name"]}</p>
