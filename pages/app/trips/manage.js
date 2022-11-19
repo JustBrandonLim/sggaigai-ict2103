@@ -12,16 +12,28 @@ export default function Manage() {
   const [userData, setUserData] = useState(false);
   const [favouritesEat, setFavouritesEat] = useState(
       [
+        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
+        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
+        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
+        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
         {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"}
       ]
     );
   const [favouritesDo, setFavouritesDo] = useState(
       [
+        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
+        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
+        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
+        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
         {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"}
       ]
   );
     const [favouritesStay, setFavouritesStay] = useState(
       [
+        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
+        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
+        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
+        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
         {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"}
       ]
   );
@@ -36,13 +48,6 @@ export default function Manage() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const [showModal, setShowModal] = useState(false);
-
-  //get data from favourites
-  useEffect(() => {
-  setEventName(favouritesDo["stopName"]);
-  setVicinity(favouritesDo["vicinity"]);
-  }, []);
-
 
   //get current user
   useEffect(() => {
@@ -116,7 +121,7 @@ export default function Manage() {
             </div>
             <div className="max-w-2xl gap-3">
               {[...Array(tripData.length)].map((e, i) => (
-                <TripCardForm view={"edit"} tripData={tripData[i]} id={i} key={i} loading={false} />
+                <TripCardForm view={"edit"} favouritesDo={favouritesDo} favouritesEat={favouritesEat} favouritesStay={favouritesStay} tripData={tripData[i]} id={i} key={i} loading={false} />
               ))}
             </div>
           </div>
