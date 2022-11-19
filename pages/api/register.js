@@ -17,10 +17,10 @@ export default async function RegisterHandler(req, res) {
             req.body["isAdmin"],
           ]);
 
+          closeConnection();
+
           if (results["affectedRows"] == 1) res.status(200).json({ results: true, success: true });
           else res.status(200).json({ results: false, success: true });
-
-          closeConnection();
         } catch (error) {
           res.status(200).json({ message: new Error(error).message, success: false });
         }

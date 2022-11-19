@@ -73,8 +73,8 @@ export default function Home() {
         </div>
         <div className="container flex flex-col items-center justify-start min-h-full gap-5 px-10 py-5">
           {searchData
-            ? searchData.map((data, i) => <AppCard key={i} data={data} view={view} />)
-            : [...Array(5)].map((data, i) => <AppCard key={i} data={data} view={null} />)}
+            ? searchData.map((data, i) => <AppCard key={i} userData={userData} data={data} view={view} />)
+            : [...Array(5)].map((data, i) => <AppCard key={i} data={data} />)}
         </div>
       </section>
     </Layout>
