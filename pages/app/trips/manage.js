@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "../../../layouts/Layout";
 import TripCardForm from "../../../components/TripCardForm";
 import PageHeader from "../../../components/PageHeader";
+import Link from "next/link";
 
 export default function Manage() {
   const [tripData, setTripData] = useState([
@@ -80,7 +81,7 @@ export default function Manage() {
                   {/* <input type="text" placeholder="Vicinity" className="w-full p-2 border-2 rounded-md focus:outline-sgg-blue" required /> */}
                   <textarea
                     placeholder="Vicinity"
-                    maxlength="100"
+                    maxLength="100"
                     onChange={(e) => setCharCount(e.target.value.length)}
                     className="w-full p-2 border-2 rounded-md focus:outline-sgg-blue"
                     required
@@ -104,9 +105,11 @@ export default function Manage() {
                 </div>
               </div>
               <div className="flex flex-col items-center justify-end gap-0 px-5 py-5 bg-gray-50 md:flex-row md:gap-3">
-                <a href="/app/trips" className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
-                  Back
-                </a>
+                <Link href="/app/trips">
+                  <p  className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
+                    Back
+                  </p>
+                </Link>
                 <button
                   type="submit"
                   className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue"
