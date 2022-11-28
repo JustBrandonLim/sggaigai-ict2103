@@ -4,15 +4,87 @@ import Layout from "../../../layouts/Layout";
 
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useEffect } from "react";
-import { getLoggedIn } from "../../../libs/auth";
+import { useState, useEffect } from "react";
+import { getLoggedIn, getUserData } from "../../../libs/auth";
+const url = require('url');
+// import {useRouter} from 'next/router';
+
 
 export default function Item(props) {
   const router = useRouter();
 
+  const [userData, setUserData] = useState(false);
+  const [reviewData, setReviewData] = useState(null);
+  const [review, setReview] = useState();
+
+  const reviewChangeHandler = (event) => {
+    // console.log(event.target.value);
+    setReview(event.target.value);
+
+  }
+  
   useEffect(() => {
     if (!getLoggedIn()) router.push("/");
+    else setUserData(getUserData());
   }, []);
+  
+
+  useEffect(() => {
+    setReviewData(null);
+
+    const pathname = window.location.pathname;
+    const activity_id = pathname.split("/")[3];
+
+    fetch('/api/search/review/', {
+      method: "GET",
+      headers: {"Content-Type": "application/json"},
+    })
+    .then((response) => response.json())
+    .then((reviewData) => {
+      setReviewData(reviewData);
+      
+    });
+    
+  }, [userData]);
+
+  async function handleReviewClick(event, id) {
+    event.preventDefault();
+    
+    const pathname = window.location.pathname;
+    const activity_id = pathname.split("/")[3]
+
+    await fetch("/api/search/review/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userID: userData.email, review: review}),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result["results"]) {
+          alert("Review has been added!");
+          router.reload(window.location.pathname);
+        } else alert("Something went wrong!");
+      });
+  }
+
+  async function handleReviewDelClick(id) {
+    // console.log("this review id is:" + id);
+
+
+    const response = await fetch("/api/search/review/", {
+      method: "DELETE",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({review_id: id})
+    })
+
+    console.log("heloooooooooooooooooo");
+ 
+    if (response.status === 200) {
+      alert("Review has been removed!");
+      router.reload(window.location.pathname);
+    } else alert("Something went wrong!!!!!!!");
+  }
+
 
   const view = props.category;
   const data = JSON.parse(props.data);
@@ -24,6 +96,7 @@ export default function Item(props) {
   const rating = data.rating;
   const openingHours = data["opening_hours"];
   const stars = data.stars;
+
 
   const image = data.imageRef;
 
@@ -105,9 +178,50 @@ export default function Item(props) {
           </div>
         </div>
       </section>
+      <section>
+        {/* <div className="bg-white">
+          <div className="container flex flex-col items-start justify-center px-5 py-10">
+            <h4 className="flex items-center text-xl">Review</h4>
+            <div className="grid lg:grid-cols-2">
+              <div className="mt-5 text-sgg-gray text-m">{name}</div>
+                <div className="mt-5 ml-3 text-sgg-gray ">{name}</div>
+                  <p className="text-md">{review}</p>
+                </div>
+            </div>
+          </div> */}
+        <div>
+          <div className=" container flex flex-col justify-start min-h-full gap-5 px-10 py-5">
+            {reviewData != null
+              ? reviewData.reviews.map((data, i) => <div>
+                 <button type="button"
+                 onClick={async () => {
+                    await handleReviewDelClick(data.review_id)
+                  }}
+                  className="float-right "
+                > x </button>
+                <p>{data["email"]}</p>
+                <p>{data["review_desc"]}</p><br></br> 
+              </div>)
+              : [...Array(5)].map((data, i) => <p>empty</p>) }
+              
+          </div>
+        </div>
+        <input
+          id="addReview"
+          type="text"
+          placeholder="Add Review"
+          className=" container flex flex-col items-center justify-start px-10 py-5 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+          rows="3"
+          onChange={reviewChangeHandler}
+        />
+        <button type="submit" onClick={handleReviewClick} className="pl w-30 px-10 py-5 text-white transition-colors rounded-sm bg-sgg-blue hover:bg-sgg-blue/20">
+          Add Review
+        </button>
+      </section>
     </Layout>
   );
 }
+
 
 export async function getStaticPaths() {
   let { db } = await connectToDatabase();
@@ -133,6 +247,14 @@ export async function getStaticPaths() {
       return { params: { category: "stay", id: hotel.ID } };
     })
   );
+
+  // let review = await db.collection("REVIEWS").find().project({ _id: 0, ID: 1 }).toArray();
+
+  // paths.push(
+  //   ...reviews.map((review) => {
+  //     return { params: { id: review.ID } };
+  //   })
+  // );
 
   return {
     paths: paths,
