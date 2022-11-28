@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getLoggedIn, getUserData } from "../../libs/auth";
 import Layout from "../../layouts/Layout";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Admin() {
   const router = useRouter();
@@ -35,9 +36,9 @@ export default function Admin() {
           <div className="p-5 bg-white rounded-md shadow-2xl">
             <h6 className="font-semibold">Add an item to MongoDB</h6>
           </div>
-          <a className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/deleteUser">
+          <Link className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/deleteUser">
             <h6 className="font-semibold">Delete a user from MySQL</h6>
-          </a>
+          </Link>
         </div>
       </section>
     </Layout>
