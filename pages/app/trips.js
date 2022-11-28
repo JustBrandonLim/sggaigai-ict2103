@@ -8,64 +8,42 @@ import { getLoggedIn, getUserData } from "../../libs/auth";
 import PageHeader from "../../components/PageHeader";
 
 export default function Trips() {
-var today = new Date();
-var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-var yyyy = today.getFullYear();
-let now = yyyy +'-'+ mm +'-'+ dd;
+  function getCurrDate() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    let now = yyyy +'-'+ mm +'-'+ dd;
+    return now
+  }
 
   const router = useRouter();
   const [userData, setUserData] = useState(false);
-  const [dateTrip, setDateTrip] = useState({ startDate: now });
-  const [tripData, setTripData] = useState([
-    [{ date: "2022-11-20", stopName: "Breakfast", time: "09 00 a.m", action: "eat", eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07" }],
-    [{ date: "2022-11-20", stopName: "Shopping", time: "11 00 a.m", action: "do", eventName: "Resort World Sentosa", vicinity: "RWS" }],
-    [
-      {
-        date: "2022-11-20",
-        stopName: "Lunch",
-        time: "12 30 p.m",
-        action: "eat",
-        eventName: "Two Chefs Bar",
-        vicinity: "31 Ocean Way, # 01 - 11 Quayside Isle",
-      },
-    ],
-    [{ date: "2022-11-20", stopName: "Check In", time: "2 p.m", action: "stay", eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane" }],
-    [
-      {
-        date: "2022-11-20",
-        stopName: "Concert night!!",
-        time: "06 00 p.m",
-        action: "do",
-        eventName: "Boys Like Girls Live In Singapore 2022: Self Title",
-        vicinity: "The Coliseum (TM), Hard Rock Hotel Singapore, Resorts World (TM) Sentosa * Singapore",
-      },
-    ],
-    [{ date: "2022-11-20", stopName: "Dinner", time: "09 00 p.m", action: "eat", eventName: "Wing Choi", vicinity: "8 Sentosa Gateway" }],
-  ]); // sample results from database
+  const [dateTrip, setDateTrip] = useState({ startDate: getCurrDate() });
+  const [firstTime, setFirstTime] = useState(true);
+  const [tripData, setTripData] = useState([]);
   useEffect(() => {
     if (!getLoggedIn()) {
       router.push("/");
     }
     else {
-      setUserData(getUserData());
+      if (firstTime){
+        setUserData(getUserData());
+        setDateTrip({startDate: getCurrDate()});
+        setFirstTime(false);
+      }
     }
   }, []);
-
-  useEffect(() => {
-    // console.log(incr_date(dateTrip.startDate));
-  }, [dateTrip]);
 
   //handles finding of data on data change
   useEffect(() => {
     //event.preventDefault();
+    // console.log(incr_date(dateTrip.startDate));
     const email = userData.email;
     const date = dateTrip.startDate;
-
     fetch(`../api/trips/trips?email=${email}&date=${date}`)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.message);
         if (result.message.length != 0) {
           setTripData(result.message); //sets the new result
         }

@@ -35,9 +35,9 @@ export default function Admin() {
           <div className="p-5 bg-white rounded-md shadow-2xl">
             <h6 className="font-semibold">Add an item to MongoDB</h6>
           </div>
-          <div className="p-5 bg-white rounded-md shadow-2xl">
+          <a className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/deleteUser">
             <h6 className="font-semibold">Delete a user from MySQL</h6>
-          </div>
+          </a>
         </div>
       </section>
     </Layout>

@@ -6,46 +6,28 @@ import TripCardForm from "../../../components/TripCardForm";
 import { getLoggedIn, getUserData } from "../../../libs/auth";
 import PageHeader from "../../../components/PageHeader";
 import Link from "next/link";
+import { format } from "path";
 
 export default function Manage() {
   const router = useRouter();
   const [userData, setUserData] = useState(false);
-  const [favouritesEat, setFavouritesEat] = useState(
-      [
-        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
-        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
-        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
-        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"},
-        {eventName: "Mikasa Cafe", vicinity: "31 Ocean Way, #01-07", price_level: "5", contact: "98552232", opening_hour: "6-9"}
-      ]
-    );
-  const [favouritesDo, setFavouritesDo] = useState(
-      [
-        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
-        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
-        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
-        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"},
-        {eventName: "Resort World Sentosa", vicinity: "RWS", price_level: "5", contact: "42142142", opening_hour: "1-5"}
-      ]
-  );
-    const [favouritesStay, setFavouritesStay] = useState(
-      [
-        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
-        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
-        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
-        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"},
-        {eventName: "The Barracks Hotel Sentosa", vicinity: "2 Gunner Lane", contact: "12332322"}
-      ]
-  );
+  const [favouritesData, setFavouritesData] = useState([]);
+  const [favouritesStay, setFavouritesStay] = useState([]);
+  const [favouritesEat, setFavouritesEat] = useState([]);
+  const [favouritesDo, setFavouritesDo] = useState([]);
+  const [view, setView] = useState("eat");
   const [eventName, setEventName] = useState("Event");
   const [vicinity, setVicinity] = useState("Vicinity");
   const [priceLevel, setPriceLevel] = useState("-");
   const [contact, setContact] = useState("-");
   const [openingHour, setOpeningHour] = useState("-");
   const [selectedDate, setselectedDate] = useState("");
+  const [stopName, setStopName] = useState("");
+  const [stopTime, setStopTime] = useState("");
   const [tripData, setTripData] = useState([]);
   const [tab, setTab] = useState(["Places to EAT", "Places to DO", "Places to STAY"]);
   const [tabIndex, setTabIndex] = useState(0);
+  const [placeID, setPlaceID] = useState("");
 
   const [showModal, setShowModal] = useState(false);
 
@@ -83,29 +65,117 @@ export default function Manage() {
           setTripData([])
         }
       });
+
+    fetch(`../../api/favourites/stay?userID=${email}`)
+    .then((res) => res.json())
+    .then((favouritesData) => {
+      setFavouritesStay(favouritesData);
+    });
+
+    fetch(`../../api/favourites/eat?userID=${email}`)
+    .then((res) => res.json())
+    .then((favouritesData) => {
+      setFavouritesEat(favouritesData);
+    });
+
+    fetch(`../../api/favourites/do?userID=${email}`)
+    .then((res) => res.json())
+    .then((favouritesData) => {
+      setFavouritesDo(favouritesData);
+    });
   },[]);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  // //Handles upon view change
+  // useEffect(() => {
+  //   setFavouritesData([]);
 
-    const stopName = event.target.querySelector("#stopname").value;
-    const eventName = event.target.querySelector("#eventname").value;
-    const Time = event.target.querySelector("#time").value;
-    const Vicinity = event.target.querySelector("#Vicinity").value;
+  //   fetch(`../../api/favourites/${view}?userID=${userData.email}`)
+  //     .then((res) => res.json())
+  //     .then((favouritesData) => {
+  //       console.log(favouritesData);
+  //       setFavouritesData(favouritesData);
+  //     });
+  // }, [view, userData]);
+  
+  //handle different tabs
+  function handleBtnClick(number) {
+    setTabIndex(number);
+    switch(number) {
+    case(0):
+      setView("eat");
+      break;
+    case(1):
+      setView("do");
+      break;
+    case(2):
+      setView("stay");
+      break;
+    }
+  }
 
-    await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: password, firstName: firstName, lastName: lastName, isAdmin: 0 }),
-    })
+  
+  const handleClick = (e) => {
+    e.preventDefault()
+    if (eventName === "Event") {
+      alert("Please choose a place!");
+    }
+    else {
+      let time = formatTime(stopTime);
+      let type = getEventType(placeID);
+      fetch(`../../api/trips/addTrips?email=${userData.email}&date=${selectedDate}&stop_name=${stopName}&stop_time=${time}&place_name=${eventName}&place_address=${vicinity}&place_type=${type}`)
       .then((response) => response.json())
       .then((result) => {
-        if (result["results"] == true) {
-          alert("Account created!");
-          router.push("/");
-        } else alert("Something went wrong!");
+        if(result.success) {
+          alert("Added!");
+          resetToDefault();
+          window.location.reload();
+        }
+        else {
+          alert("Error adding item");
+        }
       });
+    }
   }
+
+  //get the event type
+  function getEventType(place) {
+    if (place.indexOf("E") > -1) {
+      return "DO"
+    }
+    else if (place.indexOf("R") > -1) {
+      return "EAT"
+    }
+    else {
+      return "STAY"
+    }
+  }
+
+  //Formatting the time
+  function formatTime(time) {
+    let hour = parseInt(time.slice(0,2));
+    let mins = time.slice(3,5)
+    if (time.indexOf('PM') > -1) {
+      hour += 12;
+    }
+    let timing = hour + ":" + mins + ":00";
+    return timing;
+  }
+
+  //resets all fields to default
+  function resetToDefault() {
+    setView("eat");
+    setFavouritesData([]);
+    setEventName("Event");
+    setVicinity("Vicinity");
+    setPriceLevel("-");
+    setContact("-");
+    setOpeningHour("-");
+    setStopName("");
+    setStopTime("");
+    setTabIndex(0);
+    setPlaceID("");
+  }
+
 
   return (
     <Layout view={"trip"} loggedIn={true}>
@@ -121,7 +191,7 @@ export default function Manage() {
             </div>
             <div className="max-w-2xl gap-3">
               {[...Array(tripData.length)].map((e, i) => (
-                <TripCardForm view={"edit"} favouritesDo={favouritesDo} favouritesEat={favouritesEat} favouritesStay={favouritesStay} tripData={tripData[i]} id={i} key={i} loading={false} />
+                <TripCardForm view={"edit"} favouriteDo={favouritesDo} favouriteStay={favouritesStay} favouriteEat={favouritesEat} tripData={tripData[i]} id={i} key={i} loading={false} />
               ))}
             </div>
           </div>
@@ -136,7 +206,7 @@ export default function Manage() {
                     <h4 className="w-2/3">Stop Name</h4>
                   </div>
                   <div className="flex flex-row gap-4 ">
-                    <input type="text" placeholder="Stop Name" className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
+                    <input type="text" placeholder="Stop Name" onChange={(e) => setStopName(e.target.value)} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
                     <button onClick={()=> setShowModal(true)} type="button" className="flex w-1/3 px-10 py-2 text-sm font-medium transition-colors duration-150 bg-white border-2 rounded-sm text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue" required>Select From Favourites</button>
                   </div>
                 </div>
@@ -146,8 +216,8 @@ export default function Manage() {
                     <h4 className="w-1/3 pl-2">Time</h4>
                   </div>
                   <div className="flex flex-row gap-4 ">
-                    <input type="text" value={eventName} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" disabled />
-                    <input type="time" placeholder="Time" className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
+                    <input type="text" value={eventName} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" disabled required/>
+                    <input type="time" placeholder="Time" onChange={(e) => setStopTime(e.target.value)} className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
                   </div>
                 </div>
                 <div className="py-4 input-group">
@@ -182,6 +252,7 @@ export default function Manage() {
                 </Link>
                 <button
                   type="submit"
+                  onClick={handleClick}
                   className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue"
                 >
                   Create New Stop
@@ -208,31 +279,31 @@ export default function Manage() {
                                             <p className="inline text-lg font-medium leading-relaxed text-black">Select Stop from Favourites</p>
                                             <div>
                                                 <div className="py-3">
-                                                    <button onClick={() => setTabIndex(0)} className={`${tab[tabIndex] == tab[0] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[0] }`}</button>
-                                                    <button onClick={() => setTabIndex(1)} className={`${tab[tabIndex] == tab[1] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } mx-10 text-sm`}>{`${tab == 'null' ? "" : tab[1] }`}</button>
-                                                    <button onClick={() => setTabIndex(2)} className={`${tab[tabIndex] == tab[2] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[2] }`}</button>
+                                                    <button onClick={() => handleBtnClick(0)} className={`${tab[tabIndex] == tab[0] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[0] }`}</button>
+                                                    <button onClick={() => handleBtnClick(1)} className={`${tab[tabIndex] == tab[1] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } mx-10 text-sm`}>{`${tab == 'null' ? "" : tab[1] }`}</button>
+                                                    <button onClick={() => handleBtnClick(2)} className={`${tab[tabIndex] == tab[2] ? "text-blue-600 font-bold border-b-2 border-indigo-500" : "text-black" } text-sm`}>{`${tab == 'null' ? "" : tab[2] }`}</button>
                                                 </div>
                                               <div className={`${ tab[tabIndex] == "Places to EAT" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesDo.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesDo[i]["eventName"], 
-                                                  setVicinity(favouritesDo[i]["vicinity"]), setPriceLevel(favouritesDo[i]["price_level"]), setContact(favouritesDo[i]["contact"]), setOpeningHour(favouritesDo[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesDo[i]["eventName"]} </div>)}
+                                                  {[...Array(favouritesEat.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesEat[i]["name"], 
+                                                  setVicinity(favouritesEat[i]["vicinity"]), setPriceLevel(favouritesEat[i]["price_level"]), setContact(favouritesEat[i]["phone_number"]), setOpeningHour(favouritesEat[i]["opening_hour"]),setPlaceID(favouritesEat[i]["ID"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesEat[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>
                                               <div className={`${ tab[tabIndex] == "Places to DO" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesEat.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesEat[i]["eventName"], 
-                                                  setVicinity(favouritesEat[i]["vicinity"]), setPriceLevel(favouritesEat[i]["price_level"]), setContact(favouritesEat[i]["contact"]), setOpeningHour(favouritesEat[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesEat[i]["eventName"]} </div>)}
+                                                  {[...Array(favouritesDo.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesDo[i]["name"], 
+                                                  setVicinity(favouritesDo[i]["vicinity"]), setPriceLevel(favouritesDo[i]["price_level"]), setContact(favouritesDo[i]["phone_number"]), setOpeningHour(favouritesDo[i]["opening_hour"]),setPlaceID(favouritesDo[i]["ID"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesData[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>
                                               <div className={`${ tab[tabIndex] == "Places to STAY" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesStay.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesStay[i]["eventName"], 
-                                                  setVicinity(favouritesStay[i]["vicinity"]), setContact(favouritesStay[i]["contact"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesStay[i]["eventName"]} </div>)}
+                                                  {[...Array(favouritesStay.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesStay[i]["name"], 
+                                                  setVicinity(favouritesStay[i]["vicinity"]), setContact(favouritesStay[i]["phone_number"]),setPlaceID(favouritesStay[i]["ID"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesStay[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>

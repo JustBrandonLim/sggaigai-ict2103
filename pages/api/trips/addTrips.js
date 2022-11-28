@@ -5,22 +5,22 @@ const { connectToDatabase, closeConnection } = require("../../../libs/mysql");
 export default async function getTripsHandler(req, res) {
   switch (req.method) {
     case "GET":
-      if (!req.query["date"] || !req.query["email"])
+      if (!req.query["date"] || !req.query["email"] || !req.query["stop_name"] || !req.query["stop_time"] || !req.query["place_type"] || !req.query["place_name"] || !req.query["place_address"])
         res.status(200).json({ message: [], results: false, success: true });
       else {
         try {
           let { db } = await connectToDatabase();
-          console.log(req.query["email"]);
-          console.log(req.query["date"]);
-          let [results] = await db.execute("SELECT * FROM trips WHERE user_id = ? AND date like CONCAT(?,'%') ORDER BY stop_time ASC", [
+          let [results] = await db.execute("INSERT INTO trips(user_id,stop_name,stop_time,place_name,place_address,place_type,date) VALUES (?,?,?,?,?,?,?)", [
             req.query["email"],
+            req.query["stop_name"],
+            req.query["stop_time"],
+            req.query["place_name"],
+            req.query["place_address"],
+            req.query["place_type"],
             req.query["date"]
           ]);
-          if (results.length != 0) {
-            res.status(200).json({ message: results, success: true });
-            closeConnection();
-          }
-          else res.status(200).json({ message: [], success: true });
+          console.log(results);
+          res.status(200).json({success: true });
           closeConnection();
         } catch (error) {
           closeConnection();

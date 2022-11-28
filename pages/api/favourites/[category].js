@@ -19,7 +19,7 @@ export default async function SearchHandler(req, res) {
               let filterEat = eatResults.map((e) => {
                 return e.places_id;
               });
-
+              closeConnection();
               //
               let restaurants = await mongoDB
                 .collection("RESTAURANTS")
@@ -33,11 +33,11 @@ export default async function SearchHandler(req, res) {
                 req.query["userID"],
                 "E%",
               ]);
-              closeConnection();
-
+              
               let filterDo = doResults.map((e) => {
                 return e.places_id;
               });
+              closeConnection();
 
               let events = await mongoDB
                 .collection("EVENTS")
@@ -51,11 +51,11 @@ export default async function SearchHandler(req, res) {
                 req.query["userID"],
                 "H%",
               ]);
-              closeConnection();
 
               let filterStay = stayResults.map((e) => {
                 return e.places_id;
               });
+              closeConnection();
 
               let hotels = await mongoDB
                 .collection("HOTELS")

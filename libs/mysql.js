@@ -14,6 +14,7 @@ export async function connectToDatabase() {
 
   //For AWS RDS ( Amazon Server )
   connection = await mysql.createConnection({
+    connectionLimit: 100,
     host: MYSQL_HOST,
     user: MYSQL_USER,
     database: MYSQL_DATABASE,
