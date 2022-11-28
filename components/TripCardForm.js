@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
+import { useRouter } from "next/router";
 let strokeColor = "orange";
 let activeColor = "grey";
 
 export default function TripCardForm(props) {
     const [activeNode, setActiveNode] = useState(-1);
-
-    const [favouritesEat, setFavouritesEat] = useState(props.favouritesEat);
-    const [favouritesDo, setFavouritesDo] = useState(props.favouritesDo);
-    const [favouritesStay, setFavouritesStay] = useState(props.favouritesStay);
+    const [favouritesEat, setFavouritesEat] = useState(props.favouriteEat);
+    const [favouritesDo, setFavouritesDo] = useState(props.favouriteDo);
+    const [favouritesStay, setFavouritesStay] = useState(props.favouriteStay);
     const [eventName, setEventName] = useState("Event");
     const [vicinity, setVicinity] = useState("Vicinity");
     const [priceLevel, setPriceLevel] = useState("-");
@@ -16,6 +16,17 @@ export default function TripCardForm(props) {
     const [tab, setTab] = useState(["Places to EAT", "Places to DO", "Places to STAY"]);
     const [tabIndex, setTabIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [tripID, setTripID] = useState("");
+    const [stopTime, setStopTime] = useState("");
+    const [stopName, setStopName] = useState("");
+    const [placeID, setPlaceID] = useState("");
+
+    useEffect(() => {
+      setFavouritesEat(props.favouriteEat)
+      setFavouritesDo(props.favouriteDo)
+      setFavouritesStay(props.favouriteStay)
+    },[])
+
     //converts mySQL time to a 12 hour format
     function convertTo12Time(timing) {
       if (timing) {
@@ -30,6 +41,51 @@ export default function TripCardForm(props) {
         return time;
       }
     }
+
+    const handleClick = (e) => {
+      e.preventDefault()
+      if (eventName === "Event") {
+        alert("Please choose a place!");
+      }
+      else {
+        let time = formatTime(stopTime);
+        let type = getEventType(placeID);
+        fetch(`../../api/trips/editTrips?trip_id=${tripID}&stop_name=${stopName}&stop_time=${time}&place_name=${eventName}&place_address=${vicinity}&place_type=${type}`)
+        .then((response) => response.json())
+        .then((result) => {
+          if(result.success) {
+            alert("Changed!");
+          }
+          else {
+            alert("Error changing item");
+          }
+        });
+      }
+    }
+
+    //get the event type
+  function getEventType(place) {
+    if (place.indexOf("E") > -1) {
+      return "DO"
+    }
+    else if (place.indexOf("R") > -1) {
+      return "EAT"
+    }
+    else {
+      return "STAY"
+    }
+  }
+
+  //Formatting the time
+  function formatTime(time) {
+    let hour = parseInt(time.slice(0,2));
+    let mins = time.slice(3,5)
+    if (time.indexOf('PM') > -1) {
+      hour += 12;
+    }
+    let timing = hour + ":" + mins + ":00";
+    return timing;
+  }
 
     if (activeNode == props.id)
     {
@@ -100,6 +156,7 @@ export default function TripCardForm(props) {
               <p className="">{props.tripData["place_address"]}</p>
           </div>
         </li>
+        {/* ----------------------------------HERE IS THE POPUP MENU FOR EDITING-------------------------------------------------- */}
           {activeNode == props.id ? (
             <>
             <div className="fixed inset-0 z-50 flex items-center justify-center outline-none focus:outline-none">
@@ -115,7 +172,7 @@ export default function TripCardForm(props) {
                           <h4 className="w-2/3">Stop Name</h4>
                         </div>
                         <div className="flex flex-row gap-4 ">
-                          <input type="text" placeholder="Stop Name" className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
+                          <input type="text" placeholder="Stop Name" onChange={(e) => setStopName(e.target.value)} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" required />
                           <button onClick={()=> setShowModal(true)} type="button" className="flex w-1/3 px-10 py-2 text-sm font-medium text-center transition-colors duration-150 bg-white border-2 rounded-sm text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue" required>Select From Favourites</button>
                         </div>
                       </div>
@@ -126,7 +183,7 @@ export default function TripCardForm(props) {
                         </div>
                         <div className="flex flex-row gap-4 ">
                           <input type="text" value={eventName} className="w-2/3 p-2 border-2 rounded-md focus:outline-sgg-blue" disabled />
-                          <input type="time" placeholder="Time" className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
+                          <input type="time" placeholder="Time" onChange={(e) => setStopTime(e.target.value)} className="flex w-1/3 p-2 border-2 rounded-md input-group focus:outline-sgg-blue" required />
                         </div>
                       </div>
                       <div className="py-4 input-group">
@@ -157,7 +214,7 @@ export default function TripCardForm(props) {
                       <p onClick={()=> setActiveNode(-1)} className="text-sgg-blue hover:text-sgg-blue/80 hover:cursor-pointer">
                         Back
                       </p>
-                      <button type="submit" onClick={() => setActiveNode(-1)} className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
+                      <button onClick={handleClick} className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
                         Save Edits
                       </button>
                     </div>
@@ -191,24 +248,24 @@ export default function TripCardForm(props) {
                                               <div className={`${ tab[tabIndex] == "Places to EAT" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesDo.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesDo[i]["eventName"], 
-                                                  setVicinity(favouritesDo[i]["vicinity"]), setPriceLevel(favouritesDo[i]["price_level"]), setContact(favouritesDo[i]["contact"]), setOpeningHour(favouritesDo[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesDo[i]["eventName"]} </div>)}
+                                                  {[...Array(props.favouriteEat.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(props.favouriteEat[i]["name"], 
+                                                  setVicinity(props.favouriteEat[i]["vicinity"]), setPriceLevel(props.favouriteEat[i]["price_level"]), setContact(props.favouriteEat[i]["phone_number"]), setOpeningHour(props.favouriteEat[i]["opening_hour"]),setPlaceID(props.favouriteEat[i]["ID"]),setTripID(props.tripData["trip_id"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {props.favouriteEat[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>
                                               <div className={`${ tab[tabIndex] == "Places to DO" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesEat.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesEat[i]["eventName"], 
-                                                  setVicinity(favouritesEat[i]["vicinity"]), setPriceLevel(favouritesEat[i]["price_level"]), setContact(favouritesEat[i]["contact"]), setOpeningHour(favouritesEat[i]["opening_hour"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesEat[i]["eventName"]} </div>)}
+                                                  {[...Array(props.favouriteDo.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(fprops.favouriteDo[i]["name"], 
+                                                  setVicinity(props.favouriteDo[i]["vicinity"]), setPriceLevel(props.favouriteDo[i]["price_level"]), setContact(props.favouriteDo[i]["phone_number"]), setOpeningHour(props.favouriteDo[i]["opening_hour"]),setPlaceID(props.favouriteDo[i]["ID"]),setTripID(props.tripData["trip_id"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {props.favouriteDo[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>
                                               <div className={`${ tab[tabIndex] == "Places to STAY" ? "visible" : "hidden"} bg-#f0f2f5`}>
                                                 <ol className="flex flex-col items-start justify-start">
                                                   <div className="w-full gap-3">
-                                                  {[...Array(favouritesStay.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(favouritesStay[i]["eventName"], 
-                                                  setVicinity(favouritesStay[i]["vicinity"]), setContact(favouritesStay[i]["contact"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {favouritesStay[i]["eventName"]} </div>)}
+                                                  {[...Array(props.favouriteStay.length)].map((e,i) => <div onClick={()=> (setShowModal(false) ,setEventName(props.favouriteStay[i]["name"], 
+                                                  setVicinity(props.favouriteStay[i]["vicinity"]), setContact(props.favouriteStay[i]["phone_number"]),setPlaceID(props.favouriteStay[i]["ID"]),setTripID(props.tripData["trip_id"])))} className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60" id={e} key={i}> {fprops.favouriteStay[i]["name"]} </div>)}
                                                   </div>
                                                 </ol>
                                               </div>
