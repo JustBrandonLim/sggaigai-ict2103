@@ -35,13 +35,14 @@ export default function Item(props) {
     const pathname = window.location.pathname;
     const activity_id = pathname.split("/")[3];
 
-    fetch('/api/search/review/', {
+    fetch(`/api/search/reviews/${activity_id}`, {
       method: "GET",
       headers: {"Content-Type": "application/json"},
     })
     .then((response) => response.json())
     .then((reviewData) => {
       setReviewData(reviewData);
+      console.log(reviewData);
       
     });
     
@@ -56,7 +57,7 @@ export default function Item(props) {
     await fetch("/api/search/review/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID: userData.email, review: review}),
+      body: JSON.stringify({ userID: userData.email, review: review, activity_id: activity_id}),
     })
       .then((response) => response.json())
       .then((result) => {
@@ -70,19 +71,23 @@ export default function Item(props) {
   async function handleReviewDelClick(id) {
     // console.log("this review id is:" + id);
 
+    const pathname = window.location.pathname;
+    const activity_id = pathname.split("/")[3]
 
     const response = await fetch("/api/search/review/", {
       method: "DELETE",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({review_id: id})
+      body: JSON.stringify({review_id: id, activity_id: activity_id})
     })
-
-    console.log("heloooooooooooooooooo");
  
-    if (response.status === 200) {
-      alert("Review has been removed!");
-      router.reload(window.location.pathname);
-    } else alert("Something went wrong!!!!!!!");
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result)
+      if (result["results"]) {
+        alert("Review has been deleted!");
+        router.reload(window.location.pathname);
+      } else alert("Something went wrong!!!!!!!");
+    });
   }
 
 
@@ -99,6 +104,25 @@ export default function Item(props) {
 
 
   const image = data.imageRef;
+
+  const renderReviews = () => {
+    if (reviewData != null) {
+      if (reviewData.reviews != undefined) {
+        return (
+          reviewData.reviews.map((data, i) => <div>
+          <button type="button"
+          onClick={async () => {
+             await handleReviewDelClick(data.review_id)
+           }}
+           className="float-right "
+         > x </button>
+         <p>{data["email"]}</p>
+         <p>{data["review_desc"]}</p><br></br> 
+       </div>)
+        )
+      }
+    }
+  }
 
   return (
     <Layout loggedIn={true} view={view} admin={false}>
@@ -191,19 +215,11 @@ export default function Item(props) {
           </div> */}
         <div>
           <div className=" container flex flex-col justify-start min-h-full gap-5 px-10 py-5">
-            {reviewData != null
-              ? reviewData.reviews.map((data, i) => <div>
-                 <button type="button"
-                 onClick={async () => {
-                    await handleReviewDelClick(data.review_id)
-                  }}
-                  className="float-right "
-                > x </button>
-                <p>{data["email"]}</p>
-                <p>{data["review_desc"]}</p><br></br> 
-              </div>)
-              : [...Array(5)].map((data, i) => <p>empty</p>) }
-              
+            {/* {reviewData != null
+              ? {reviewData.reviews != undefined ? 
+              : [...Array(5)].map((data, i)) }
+               */}
+              {renderReviews()}
           </div>
         </div>
         <input
