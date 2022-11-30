@@ -112,7 +112,7 @@ export default function Item(props) {
         return (
           reviewData.reviews.map((data, i) =>
           <>
-            {i == i && <div className="font-bold text-xl">Reviews</div>}
+            {i == 0 && <div className="font-bold text-xl">Reviews</div>}
             <div className="flex items-center justify-between shadow-sm mb-2">
               <div className="flex flex-col">
                 <div>{data["email"]}</div>
