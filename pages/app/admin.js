@@ -30,12 +30,12 @@ export default function Admin() {
           </div>
         </div>
         <div className="container grid grid-cols-1 gap-5 px-10 py-5 lg:grid-cols-2">
-          <div className="p-5 bg-white rounded-md shadow-2xl">
-            <h6 className="font-semibold">Delete an item from MongoDB</h6>
-          </div>
-          <div className="p-5 bg-white rounded-md shadow-2xl">
-            <h6 className="font-semibold">Add an item to MongoDB</h6>
-          </div>
+          <Link className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/deleteThings">
+            <h6 className="font-semibold">Delete a thing from MongoDB</h6>
+          </Link>
+          <Link className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/addThings">
+            <h6 className="font-semibold">Add a thing to MongoDB</h6>
+          </Link>
           <Link className="p-5 bg-white rounded-md shadow-2xl" href="/app/admin/deleteUser">
             <h6 className="font-semibold">Delete a user from MySQL</h6>
           </Link>
