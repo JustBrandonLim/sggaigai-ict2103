@@ -4,12 +4,14 @@ export default function Footer(props) {
       className={`${
         props.view
           ? props.view == "trip"
-            ? "bg-sgg-black"
+            ? "bg-sgg-brown"
             : props.view == "eat"
             ? "bg-sgg-orange"
             : props.view == "do"
             ? "bg-sgg-yellow"
-            : "bg-sgg-green"
+            : props.view == "stay"
+            ? "bg-sgg-green"
+            : "bg-sgg-black"
           : "bg-sgg-background"
       } ${props.view ? "text-white" : "text-gray-500"} transition-colors hover:duration-300`}
     >

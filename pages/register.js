@@ -33,10 +33,9 @@ export default function Register() {
         .then((response) => response.json())
         .then((result) => {
           if (result["results"] == true) {
+            alert("Account created!");
             router.push("/");
-          } else {
-            alert("Something went wrong!");
-          }
+          } else alert("Something went wrong!");
         });
   }
 
@@ -49,15 +48,30 @@ export default function Register() {
         </div>
         <form className="flex flex-col w-2/3 max-w-sm gap-5 mx-auto mt-10" onSubmit={handleSubmit}>
           <p className="font-bold">Register</p>
-          <input id="email" type="email" placeholder="Email" className="p-2 focus:outline-sgg-blue" />
-          <input id="password" type="password" placeholder="Password" className="p-2 focus:outline-sgg-blue" />
-          <input id="confirmPassword" type="password" placeholder="Confirm password" className="p-2 focus:outline-sgg-blue" />
+          <input id="email" type="email" placeholder="Email" className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
+          <input id="password" type="password" placeholder="Password" className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm password"
+            className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+          />
           <div className="flex flex-col items-center justify-between gap-0 md:flex-row md:gap-0">
-            <input id="firstName" type="text" placeholder="First Name" className="w-1/2 p-2 focus:outline-sgg-blue" />
-            <input id="lastName" type="text" placeholder="Last Name" className="w-2/5 p-2 focus:outline-sgg-blue" />
+            <input
+              id="firstName"
+              type="text"
+              placeholder="First Name"
+              className="w-1/2 p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+            />
+            <input
+              id="lastName"
+              type="text"
+              placeholder="Last Name"
+              className="w-2/5 p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+            />
           </div>
           <div className="flex flex-col items-center justify-between gap-5 md:flex-row md:gap-0">
-            <button type="submit" className="px-10 py-2 text-white transition-colors duration-150 bg-sgg-blue hover:bg-sgg-blue/80">
+            <button type="submit" className="px-10 py-2 text-white transition-colors duration-150 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80">
               Register
             </button>
             <p>
