@@ -42,7 +42,13 @@ export default async function handler(req, res) {
                 break;
         }
 
-        let collectionCount = data.reviews.length;
+        let collectionCount;
+
+        try {
+          collectionCount = data.reviews.length;
+        } catch (err) {
+          collectionCount = 0;
+        }
 
         const reviewId = collectionCount + 1;
 
@@ -111,15 +117,15 @@ export default async function handler(req, res) {
     var response2;
       switch (event) {
         case 'E':
-            response2 = await db.collection("EVENTS").update({ ID: id }, { $set: { reviews: newData } });
+            response2 = await db.collection("EVENTS").updateOne({ ID: id }, { $set: { reviews: newData } });
             break;
 
         case 'R':
-            response2 = await db.collection("RESTAURANTS").update({ ID: id }, { $set: { reviews: newData } })
+            response2 = await db.collection("RESTAURANTS").updateOne({ ID: id }, { $set: { reviews: newData } })
             break;
       
         case 'H':
-            response2 = await db.collection("HOTELS").update({ ID: id }, { $set: { reviews: newData } })
+            response2 = await db.collection("HOTELS").updateOne({ ID: id }, { $set: { reviews: newData } })
             break;
   
         default:

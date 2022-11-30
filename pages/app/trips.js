@@ -27,7 +27,7 @@ export default function Trips() {
       router.push("/");
     }
     else {
-      if (firstTime){
+      if (getUserData()){
         setUserData(getUserData());
         setDateTrip({startDate: getCurrDate()});
         setFirstTime(false);
@@ -37,6 +37,7 @@ export default function Trips() {
 
   //handles finding of data on data change
   useEffect(() => {
+    if (userData == false) return
     //event.preventDefault();
     // console.log(incr_date(dateTrip.startDate));
     const email = userData.email;
@@ -56,6 +57,26 @@ export default function Trips() {
   //exporting data to the next page
   function selectedDate() {
     window.location.href = "/app/trips/manage?date=" + dateTrip.startDate;
+  }
+
+  async function deleteRecord() {
+    await fetch("../api/trips/deleteTrips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: userData.email,
+        date: dateTrip.startDate
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          alert("Deleted!");
+          window.location.reload();
+        } else {
+          alert("Error deleting item");
+        }
+      });
   }
 
   function incr_date(date_str) {
@@ -105,13 +126,20 @@ export default function Trips() {
         </ol>
 
         <div className="flex flex-col items-center justify-end gap-2 px-40 py-10 md:flex-row md:gap-2">
-          <button
-            onClick={() => setDateTrip({ startDate: incr_date(dateTrip.startDate) })}
-            type="submit"
-            className="px-6 py-2 transition-colors duration-150 bg-white border-2 rounded-smpx-10 text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue"
-          >
-            Next Day
-          </button>
+            <button
+              type="submit"
+              onClick={() => deleteRecord()}
+              className="mr-3 text-red-600 transition-colors border-0 border-b-2 border-red-600 rounded-sm duration-15 hover:bg-red-500"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setDateTrip({ startDate: incr_date(dateTrip.startDate) })}
+              type="submit"
+              className="px-10 py-2 mr-3 transition-colors duration-150 bg-white border-2 rounded-smpx-10 text-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue"
+            >
+              Next Day
+            </button>
           <Link href={{pathname: '/app/trips/manage', query: {date: dateTrip.startDate}}}>
             <button className="px-10 py-2 text-white transition-colors duration-150 border-2 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80 border-sgg-blue">
               Create / Edit Trip

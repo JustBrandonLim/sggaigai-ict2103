@@ -75,7 +75,7 @@ export default function Admin() {
             </thead>
             <tbody>
                 {users.map((tuple, index) => (
-                    <tr id={index+1}>
+                    <tr id={index+1} key={i}>
                         <td className="px-6 py-4 font-medium text-gray-900">{index + 1}</td>
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{tuple.email}</th>
                         <td className="px-6 py-4 font-medium text-gray-900">{tuple.firstName}</td>
@@ -133,7 +133,7 @@ export default function Admin() {
                                   Cancel
                                 </button>
                                 <button
-                                    className="px-5 py-2 mb-1 mr-1 text-sm font-bold border-[#D9D9D9] border-2 hover:text bg-red-600 text-white rounded-sm transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
+                                    className="px-5 py-2 mb-1 mr-1 text-sm font-bold border-[#D9D9D9] border-2 hover:bg-red-600 bg-red-600 text-white rounded-sm transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
                                     type="button"
                                     onClick={() => { setShowModal(false), deleteBtn(toDelete)}}
                                 >
