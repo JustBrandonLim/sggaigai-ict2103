@@ -41,6 +41,8 @@ export default function Manage() {
 
   //handles upon page start
   useEffect(() => {
+    if (userData == false) return;
+    /*
     let user;
     if (!getLoggedIn()) {
       router.push("/");
@@ -49,37 +51,51 @@ export default function Manage() {
       setUserData(getUserData());
     }
 
-    const email = user.email;
-    let date = new URLSearchParams(window.location.search).get("date");
-    setselectedDate(date);
-    fetch(`../../api/trips/trips?email=${email}&date=${date}`)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.message.length != 0) {
-          setTripData(result.message); //sets the new result
-        } else {
-          setTripData([]);
-        }
-      });
+    const email = user.email;*/
 
-    fetch(`../../api/favourites/stay?userID=${email}`)
-      .then((res) => res.json())
-      .then((favouritesData) => {
-        setFavouritesStay(favouritesData);
-      });
+    const fetchData = async () => {
+      let date = new URLSearchParams(window.location.search).get("date");
+      setselectedDate(date);
+      await fetch(`../../api/trips/trips?email=${userData.email}&date=${date}`)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.message.length != 0) {
+            setTripData(result.message); //sets the new result
+          } else {
+            setTripData([]);
+          }
+        });
+      await fetch(`../../api/favourites/eat?userID=${userData.email}`)
+        .then((res) => res.json())
+        .then((favouritesEat) => {
+          setFavouritesEat(favouritesEat);
+        });
 
-    fetch(`../../api/favourites/eat?userID=${email}`)
-      .then((res) => res.json())
-      .then((favouritesData) => {
-        setFavouritesEat(favouritesData);
-      });
+      await fetch(`../../api/favourites/stay?userID=${userData.email}`)
+        .then((res) => res.json())
+        .then((favouritesStay) => {
+          setFavouritesStay(favouritesStay);
+        });
+      await fetch(`../../api/favourites/do?userID=${userData.email}`)
+        .then((res) => res.json())
+        .then((favouritesDo) => {
+          setFavouritesDo(favouritesDo);
+        });
+    };
 
-    fetch(`../../api/favourites/do?userID=${email}`)
-      .then((res) => res.json())
-      .then((favouritesData) => {
-        setFavouritesDo(favouritesData);
-      });
-  }, []);
+    fetchData();
+
+    //fetch(`../../api/favourites/eat?userID=${userData.email}`),
+    //.then((res) => res.json())
+    //.then((favouritesData) => {
+    //  setFavouritesEat(favouritesData);
+    //}),
+    //fetch(`../../api/favourites/do?userID=${userData.email}`),
+    //.then((res) => res.json())
+    // .then((favouritesData) => {
+    //  setFavouritesDo(favouritesData);
+    //}),
+  }, [userData]);
 
   // //Handles upon view change
   // useEffect(() => {
@@ -109,16 +125,26 @@ export default function Manage() {
     }
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     if (eventName === "Event") {
       alert("Please choose a place!");
     } else {
       let time = formatTime(stopTime);
       let type = getEventType(placeID);
-      fetch(
-        `../../api/trips/addTrips?email=${userData.email}&date=${selectedDate}&stop_name=${stopName}&stop_time=${time}&place_name=${eventName}&place_address=${vicinity}&place_type=${type}`
-      )
+      await fetch("../../api/trips/addTrips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: userData.email,
+          date: selectedDate,
+          stop_name: stopName,
+          stop_time: time,
+          place_name: eventName,
+          place_type: type,
+          place_address: vicinity,
+        }),
+      })
         .then((response) => response.json())
         .then((result) => {
           if (result.success) {
@@ -313,14 +339,12 @@ export default function Manage() {
                               <div
                                 onClick={() => (
                                   setShowModal(false),
-                                  setEventName(
-                                    favouritesEat[i]["name"],
-                                    setVicinity(favouritesEat[i]["vicinity"]),
-                                    setPriceLevel(favouritesEat[i]["price_level"]),
-                                    setContact(favouritesEat[i]["phone_number"]),
-                                    setOpeningHour(favouritesEat[i]["opening_hour"]),
-                                    setPlaceID(favouritesEat[i]["ID"])
-                                  )
+                                  setEventName(favouritesEat[i]["name"]),
+                                  setVicinity(favouritesEat[i]["vicinity"]),
+                                  setPriceLevel(favouritesEat[i]["price_level"]),
+                                  setContact(favouritesEat[i]["phone_number"]),
+                                  setOpeningHour(favouritesEat[i]["opening_hour"]),
+                                  setPlaceID(favouritesEat[i]["ID"])
                                 )}
                                 className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                 id={e}
@@ -340,14 +364,12 @@ export default function Manage() {
                               <div
                                 onClick={() => (
                                   setShowModal(false),
-                                  setEventName(
-                                    favouritesDo[i]["name"],
-                                    setVicinity(favouritesDo[i]["vicinity"]),
-                                    setPriceLevel(favouritesDo[i]["price_level"]),
-                                    setContact(favouritesDo[i]["phone_number"]),
-                                    setOpeningHour(favouritesDo[i]["opening_hour"]),
-                                    setPlaceID(favouritesDo[i]["ID"])
-                                  )
+                                  setEventName(favouritesDo[i]["name"]),
+                                  setVicinity(favouritesDo[i]["vicinity"]),
+                                  setPriceLevel(favouritesDo[i]["price_level"]),
+                                  setContact(favouritesDo[i]["phone_number"]),
+                                  setOpeningHour(favouritesDo[i]["opening_hour"]),
+                                  setPlaceID(favouritesDo[i]["ID"])
                                 )}
                                 className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                 id={e}
@@ -367,12 +389,10 @@ export default function Manage() {
                               <div
                                 onClick={() => (
                                   setShowModal(false),
-                                  setEventName(
-                                    favouritesStay[i]["name"],
-                                    setVicinity(favouritesStay[i]["vicinity"]),
-                                    setContact(favouritesStay[i]["phone_number"]),
-                                    setPlaceID(favouritesStay[i]["ID"])
-                                  )
+                                  setEventName(favouritesStay[i]["name"]),
+                                  setVicinity(favouritesStay[i]["vicinity"]),
+                                  setContact(favouritesStay[i]["phone_number"]),
+                                  setPlaceID(favouritesStay[i]["ID"])
                                 )}
                                 className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                 id={e}

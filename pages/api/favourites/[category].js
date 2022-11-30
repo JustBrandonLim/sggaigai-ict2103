@@ -19,8 +19,6 @@ export default async function SearchHandler(req, res) {
               let filterEat = eatResults.map((e) => {
                 return e.places_id;
               });
-              closeConnection();
-              //
               let restaurants = await mongoDB
                 .collection("RESTAURANTS")
                 .find({ ID: { $exists: true, $in: filterEat } })
@@ -33,11 +31,10 @@ export default async function SearchHandler(req, res) {
                 req.query["userID"],
                 "E%",
               ]);
-              
+
               let filterDo = doResults.map((e) => {
                 return e.places_id;
               });
-              closeConnection();
 
               let events = await mongoDB
                 .collection("EVENTS")
@@ -55,7 +52,6 @@ export default async function SearchHandler(req, res) {
               let filterStay = stayResults.map((e) => {
                 return e.places_id;
               });
-              closeConnection();
 
               let hotels = await mongoDB
                 .collection("HOTELS")
@@ -67,6 +63,7 @@ export default async function SearchHandler(req, res) {
           }
           closeConnection();
         } catch (error) {
+          closeConnection();
           res.status(200).json({
             message: new Error(error).message,
             success: false,
