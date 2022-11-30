@@ -75,7 +75,7 @@ export default function Admin() {
             </thead>
             <tbody>
                 {users.map((tuple, index) => (
-                    <tr id={index+1}>
+                    <tr id={index+1} key={i}>
                         <td className="px-6 py-4 font-medium text-gray-900">{index + 1}</td>
                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{tuple.email}</th>
                         <td className="px-6 py-4 font-medium text-gray-900">{tuple.firstName}</td>
