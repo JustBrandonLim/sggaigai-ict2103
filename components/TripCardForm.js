@@ -42,16 +42,26 @@ export default function TripCardForm(props) {
     }
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     if (eventName === "Event") {
       alert("Please choose a place!");
     } else {
       let time = formatTime(stopTime);
       let type = getEventType(placeID);
-      fetch(
-        `../../api/trips/editTrips?trip_id=${tripID}&stop_name=${stopName}&stop_time=${time}&place_name=${eventName}&place_address=${vicinity}&place_type=${type}`
-      )
+
+      await fetch("../../api/trips/editTrips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          trip_id: tripID,
+          stop_name: stopName,
+          stop_time: time,
+          place_name: eventName,
+          place_address: vicinity,
+          place_type: type,
+        }),
+      })
         .then((response) => response.json())
         .then((result) => {
           if (result.success) {
@@ -273,15 +283,13 @@ export default function TripCardForm(props) {
                                 <div
                                   onClick={() => (
                                     setShowModal(false),
-                                    setEventName(
-                                      props.favouriteEat[i]["name"],
-                                      setVicinity(props.favouriteEat[i]["vicinity"]),
-                                      setPriceLevel(props.favouriteEat[i]["price_level"]),
-                                      setContact(props.favouriteEat[i]["phone_number"]),
-                                      setOpeningHour(props.favouriteEat[i]["opening_hour"]),
-                                      setPlaceID(props.favouriteEat[i]["ID"]),
-                                      setTripID(props.tripData["trip_id"])
-                                    )
+                                    setEventName(props.favouriteEat[i]["name"]),
+                                    setVicinity(props.favouriteEat[i]["vicinity"]),
+                                    setPriceLevel(props.favouriteEat[i]["price_level"]),
+                                    setContact(props.favouriteEat[i]["phone_number"]),
+                                    setOpeningHour(props.favouriteEat[i]["opening_hour"]),
+                                    setPlaceID(props.favouriteEat[i]["ID"]),
+                                    setTripID(props.tripData["trip_id"])
                                   )}
                                   className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                   id={e}
@@ -301,15 +309,13 @@ export default function TripCardForm(props) {
                                 <div
                                   onClick={() => (
                                     setShowModal(false),
-                                    setEventName(
-                                      fprops.favouriteDo[i]["name"],
-                                      setVicinity(props.favouriteDo[i]["vicinity"]),
-                                      setPriceLevel(props.favouriteDo[i]["price_level"]),
-                                      setContact(props.favouriteDo[i]["phone_number"]),
-                                      setOpeningHour(props.favouriteDo[i]["opening_hour"]),
-                                      setPlaceID(props.favouriteDo[i]["ID"]),
-                                      setTripID(props.tripData["trip_id"])
-                                    )
+                                    setEventName(props.favouriteDo[i]["name"]),
+                                    setVicinity(props.favouriteDo[i]["vicinity"]),
+                                    setPriceLevel(props.favouriteDo[i]["price_level"]),
+                                    setContact(props.favouriteDo[i]["phone_number"]),
+                                    setOpeningHour(props.favouriteDo[i]["opening_hour"]),
+                                    setPlaceID(props.favouriteDo[i]["ID"]),
+                                    setTripID(props.tripData["trip_id"])
                                   )}
                                   className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                   id={e}
@@ -329,20 +335,18 @@ export default function TripCardForm(props) {
                                 <div
                                   onClick={() => (
                                     setShowModal(false),
-                                    setEventName(
-                                      props.favouriteStay[i]["name"],
-                                      setVicinity(props.favouriteStay[i]["vicinity"]),
-                                      setContact(props.favouriteStay[i]["phone_number"]),
-                                      setPlaceID(props.favouriteStay[i]["ID"]),
-                                      setTripID(props.tripData["trip_id"])
-                                    )
+                                    setEventName(props.favouriteStay[i]["name"]),
+                                    setVicinity(props.favouriteStay[i]["vicinity"]),
+                                    setContact(props.favouriteStay[i]["phone_number"]),
+                                    setPlaceID(props.favouriteStay[i]["ID"]),
+                                    setTripID(props.tripData["trip_id"])
                                   )}
                                   className="pt-4 pb-1 border-b-2 hover:cursor-pointer hover:text-black/60"
                                   id={e}
                                   key={i}
                                 >
                                   {" "}
-                                  {fprops.favouriteStay[i]["name"]}{" "}
+                                  {props.favouriteStay[i]["name"]}{" "}
                                 </div>
                               ))}
                             </div>
