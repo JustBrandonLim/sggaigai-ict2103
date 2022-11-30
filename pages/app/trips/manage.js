@@ -375,7 +375,7 @@ export default function Manage() {
                                 key={i}
                               >
                                 {" "}
-                                {favouritesData[i]["name"]}{" "}
+                                {favouritesDo[i]["name"]}{" "}
                               </div>
                             ))}
                           </div>
