@@ -1,5 +1,3 @@
-import { ConnectionPoolClosedEvent } from "mongodb";
-
 const { connectToDatabase, closeConnection } = require("../../../libs/mysql");
 
 export default async function getTripsHandler(req, res) {

@@ -140,9 +140,8 @@ export default function Manage() {
           date: selectedDate,
           stop_name: stopName,
           stop_time: time,
-          place_name: eventName,
+          place_name: vicinity,
           place_type: type,
-          place_address: vicinity,
         }),
       })
         .then((response) => response.json())
