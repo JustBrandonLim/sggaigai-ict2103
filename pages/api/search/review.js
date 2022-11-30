@@ -42,7 +42,13 @@ export default async function handler(req, res) {
                 break;
         }
 
-        let collectionCount = data.reviews.length;
+        let collectionCount;
+
+        try {
+          collectionCount = data.reviews.length;
+        } catch (err) {
+          collectionCount = 0;
+        }
 
         const reviewId = collectionCount + 1;
 

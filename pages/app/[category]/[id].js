@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getLoggedIn, getUserData } from "../../../libs/auth";
+import { getCookie } from 'cookies-next';
 const url = require('url');
 // import {useRouter} from 'next/router';
 
@@ -13,7 +14,7 @@ const url = require('url');
 export default function Item(props) {
   const router = useRouter();
 
-  const [userData, setUserData] = useState(false);
+  const [userData, setUserData] = useState({});
   const [reviewData, setReviewData] = useState(null);
   const [review, setReview] = useState();
 
@@ -25,7 +26,7 @@ export default function Item(props) {
   
   useEffect(() => {
     if (!getLoggedIn()) router.push("/");
-    else setUserData(getUserData());
+    else setUserData(JSON.parse(getCookie('userData')));
   }, []);
   
 
@@ -34,6 +35,7 @@ export default function Item(props) {
 
     const pathname = window.location.pathname;
     const activity_id = pathname.split("/")[3];
+
 
     fetch(`/api/search/reviews/${activity_id}`, {
       method: "GET",
@@ -114,7 +116,7 @@ export default function Item(props) {
           onClick={async () => {
              await handleReviewDelClick(data.review_id)
            }}
-           className="float-right "
+           className="float-right " 
          > x </button>
          <p>{data["email"]}</p>
          <p>{data["review_desc"]}</p><br></br> 
