@@ -3,7 +3,7 @@ import Layout from "../../../layouts/Layout";
 import { useState, useEffect } from "react";
 import { getLoggedIn, getUserData } from "../../../libs/auth";
 
-export default function deleteThings() {
+export default function DeleteThings() {
   const router = useRouter();
 
   const [userData, setUserData] = useState(false);

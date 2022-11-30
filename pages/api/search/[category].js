@@ -47,18 +47,15 @@ export default async function SearchHandler(req, res) {
           case "stay":
             let hotels = await db
               .collection("HOTELS")
-              .aggregate(
-                [
-                  {
-                    $geoNear: {
-                      near: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] },
-                      distanceField: "dist.calculated",
-                      spherical: true,
-                    },
+              .aggregate([
+                {
+                  $geoNear: {
+                    near: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] },
+                    distanceField: "dist.calculated",
+                    spherical: true,
                   },
-                ]
-                //loc: { $near: { $geometry: { type: "Point", coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)] } } },
-              )
+                },
+              ])
               .limit(100)
               .toArray();
             res.status(200).json(hotels);

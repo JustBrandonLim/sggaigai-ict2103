@@ -32,7 +32,7 @@ export default function Admin() {
 
   const deleteBtn = (event) => {
     const Data = event.target.parentNode.parentNode.innerText.split("\t");
-    const email = Data[2];
+    const email = Data[1];
     console.log(email);
     fetch("../../api/admin/deleteUser", {
       method: "POST",
