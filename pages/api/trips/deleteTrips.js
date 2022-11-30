@@ -1,39 +1,27 @@
+import { ConnectionPoolClosedEvent } from "mongodb";
+
 const { connectToDatabase, closeConnection } = require("../../../libs/mysql");
 
-export default async function getTripsHandler(req, res) {
+export default async function deleteTripsHandler(req, res) {
   switch (req.method) {
     case "POST":
       if (
         !req.body["date"] ||
-        !req.body["email"] ||
-        !req.body["stop_name"] ||
-        !req.body["stop_time"] ||
-        !req.body["place_type"] ||
-        !req.body["place_name"] ||
-        !req.body["place_address"]
+        !req.body["email"]
       ) {
-        console.log(req.body["date"]);
-        console.log(req.body["email"]);
-        console.log(req.body["stop_name"]);
         res.status(200).json({ message: [], results: false, success: true });
       } else {
         try {
           let { db } = await connectToDatabase();
           let [results] = await db.execute(
-            "INSERT INTO trips(user_id,stop_name,stop_time,place_name,place_address,place_type,date) VALUES (?,?,?,?,?,?,?)",
+            "DELETE FROM trips WHERE user_id = ? AND CAST(date as Date) = CAST(? as Date)",
             [
               req.body["email"],
-              req.body["stop_name"],
-              req.body["stop_time"],
-              req.body["place_name"],
-              req.body["place_address"],
-              req.body["place_type"],
               req.body["date"],
             ]
           );
-          console.log(results);
-          res.status(200).json({ success: true });
           closeConnection();
+          res.status(200).json({ success: true });
         } catch (error) {
           closeConnection();
           res.status(200).json({ message: new Error(error).message, success: false });
