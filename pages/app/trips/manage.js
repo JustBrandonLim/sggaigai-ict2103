@@ -140,7 +140,8 @@ export default function Manage() {
           date: selectedDate,
           stop_name: stopName,
           stop_time: time,
-          place_name: vicinity,
+          place_name: eventName,
+          place_address: vicinity,
           place_type: type,
         }),
       })

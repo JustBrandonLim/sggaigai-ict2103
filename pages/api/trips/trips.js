@@ -19,7 +19,6 @@ export default async function getTripsHandler(req, res) {
           if (results.length != 0) {
             res.status(200).json({ message: results, success: true });
           } else res.status(200).json({ message: [], success: true });
-          console.log("CCB");
         } catch (error) {
           closeConnection();
           res.status(200).json({ message: new Error(error).message, success: false });
