@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getLoggedIn, getUserData } from "../../../libs/auth";
 import Layout from "../../../layouts/Layout";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Admin() {
   const router = useRouter();
@@ -212,11 +213,11 @@ export default function Admin() {
             <h1 className="flex items-center text-2xl font-bold">Add a place!</h1>
           </div>
         </div>
-        <div class="container grid grid-cols-1 gap-5 px-10 py-5 content-center">
+        <div class="flex justify-center">
           <div class="overflow-x-auto relative shadow-md sm:rounded-lg  ">
             <form className="flex flex-col w-2/3 max-w-sm gap-5 mx-auto mt-10" onSubmit={handleSubmit}>
               <div>
-                <select name="place_type" id="place_type" onChange={(e) => setChanged(e.target.value)}>
+                <select className="p-2 m-2 text-xl font-bold border-2 border-black" name="place_type" id="place_type" onChange={(e) => setChanged(e.target.value)}>
                   <option value="Restaurant">Restaurant</option>
                   <option value="Hotel">Hotel</option>
                   <option value="Event">Event</option>
@@ -225,7 +226,7 @@ export default function Admin() {
                   id="ID"
                   type="text"
                   placeholder="Place ID"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                   pattern="[0-9]{4}"
                   required
                 />
@@ -233,28 +234,28 @@ export default function Admin() {
                   id="name"
                   type="text"
                   placeholder="Place Name"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                   required
                 />
                 <input
                   id="vicinity"
                   type="text"
                   placeholder="Vicinity"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                   required
                 />
                 <input
                   id="address"
                   type="text"
                   placeholder="Address"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                   required
                 />
                 <input
                   id="phone_number"
                   type="tel"
                   placeholder="Phone Number"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                   pattern="[0-9]{8}"
                   required
                 />
@@ -265,7 +266,7 @@ export default function Admin() {
                     placeholder="Latitude"
                     min="-90"
                     max="90"
-                    className="w-1/2 p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                    className="w-1/2 p-2 m-1 mr-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                     required
                   />
                   <input
@@ -274,7 +275,7 @@ export default function Admin() {
                     placeholder="Longitude"
                     min="-180"
                     max="180"
-                    className="w-1/2 p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                    className="w-1/2 p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                     required
                   />
                 </div>
@@ -282,36 +283,37 @@ export default function Admin() {
                   id="imageRef"
                   type="text"
                   placeholder="imageRef"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                 />
                 <input
                   id="openingHours"
                   type="text"
                   placeholder="opening hours"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                 />
-                <input id="types" type="text" placeholder="types" className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
+                <input id="types" type="text" placeholder="types" className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue" />
                 <input
                   id="price_level"
                   type="text"
                   placeholder="Price level out of 5"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                 />
                 <input
                   id="stars"
                   type="text"
                   placeholder="Stars out of 5"
-                  className="p-2 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
+                  className="p-2 m-1 rounded-sm ring-2 ring-sgg-input-gray focus:outline-sgg-blue"
                 />
               </div>
 
-              <div className="flex flex-col items-center justify-between gap-5 md:flex-row md:gap-0">
+              <div className="flex flex-col items-center justify-between gap-5 mb-4 md:flex-row md:gap-0">
+                <Link href="/app/account">
                 <button
-                  onClick="history.back()"
                   className="px-10 py-2 text-white transition-colors duration-150 bg-black rounded-sm hover:bg-sgg-red/80"
                 >
                   Back
                 </button>
+                </Link>
                 <button type="submit" className="px-10 py-2 text-white transition-colors duration-150 rounded-sm bg-sgg-blue hover:bg-sgg-blue/80">
                   Add
                 </button>
