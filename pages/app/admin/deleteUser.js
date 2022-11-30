@@ -133,7 +133,7 @@ export default function Admin() {
                                   Cancel
                                 </button>
                                 <button
-                                    className="px-5 py-2 mb-1 mr-1 text-sm font-bold border-[#D9D9D9] border-2 hover:text bg-red-600 text-white rounded-sm transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
+                                    className="px-5 py-2 mb-1 mr-1 text-sm font-bold border-[#D9D9D9] border-2 hover:bg-red-600 bg-red-600 text-white rounded-sm transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
                                     type="button"
                                     onClick={() => { setShowModal(false), deleteBtn(toDelete)}}
                                 >
